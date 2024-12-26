@@ -1,126 +1,110 @@
-# Song-Recognition-Bot-V2
+# 🎵 Song Recognition Bot
 
-## Overview
-Song-Recognition-Bot-V2 is a Telegram bot designed to:
-1. Download videos or audio from Instagram and YouTube links.
-2. Recognize songs using the AcrCloud API from uploaded files, voice messages, or provided links.
-3. Retrieve and send the original song file from YouTube along with its metadata (e.g., title, artist).
-
-The bot is optimized for concurrent user handling, fast processing, and minimal code complexity, making it efficient and scalable.
+A Telegram bot that helps you identify songs from Instagram reels by analyzing audio content using the ACRCloud API. The bot downloads the reel, extracts audio, and provides song details such as title, artist, album, release date, and YouTube link.
 
 ---
 
-## Features
-- **Input Options:**
-  - Accepts Instagram/YouTube links, video files, audio files, and voice messages.
-- **Video Download:**
-  - Downloads and sends videos (up to 50MB) from Instagram/YouTube.
-- **Song Recognition:**
-  - Recognizes songs using AcrCloud from various input types.
-- **Song Retrieval:**
-  - Searches for the recognized song on YouTube and sends the original song file with detailed metadata.
-- **Concurrency:**
-  - Supports multiple users simultaneously through asynchronous operations.
+## 🚀 Features
+
+- Download Instagram reels from links shared by users.
+- Extract audio from the reels.
+- Identify songs using the ACRCloud API.
+- Share song details with users, including title, artist, album, and release date.
 
 ---
 
-## Installation
+## 🛠️ Project Structure
+
+```plaintext
+Song-Recognition-Bot/
+│
+├── bot.py                   # Main entry point for the bot
+├── .env                     # Environment variables
+├── requirements.txt         # List of Python dependencies
+├── utils/
+│   ├── instagram.py         # Functions to fetch Instagram video and caption
+│   ├── audio_processing.py  # Functions to download and process audio
+│   ├── acrcloud_handler.py          # Functions to interact with ACRCloud API
+│   ├── downloader.py           # Reusable utility functions
+│   ├── cleardata.py           # Reusable utility functions
+│
+├── data/
+│   ├── downloads/           # Folder for temporarily storing video and audio files
+│
+└── README.md                # Documentation about the project
+```
+
+---
+
+## ⚙️ Setup Instructions
 
 ### Prerequisites
-1. Python 3.8+
-2. Telegram Bot Token (from [BotFather](https://core.telegram.org/bots#botfather)).
-3. AcrCloud API credentials (host, access key, access secret).
 
-### Steps
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/Song-Recognition-Bot-V2.git
-   cd Song-Recognition-Bot-V2
-   ```
+- Python 3.7 or higher
+- ACRCloud account and credentials
+- Telegram Bot API token
+- [FFmpeg](https://ffmpeg.org/) installed on your system
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1️⃣ Clone the Repository
 
-3. Set up configuration:
-   - Create a `.env` file or edit `config.py` with your:
-     - Telegram bot token
-     - AcrCloud API credentials
-
-4. Run the bot:
-   ```bash
-   python main.py
-   ```
-
----
-
-## Project Structure
+```bash
+git clone https://github.com/your-username/music-finder-bot.git
+cd music-finder-bot
 ```
-Song-Recognition-Bot-V2/
-│
-├── main.py                      # Entry point for the bot
-├── config.py                    # Configuration file for storing constants
-├── requirements.txt             # Dependencies and libraries
-├── README.md                    # Project documentation
-│
-├── handlers/                    # Contains bot message and command handlers
-│   ├── __init__.py
-│   ├── message_handler.py
-│   ├── command_handler.py
-│
-├── services/                    # Core processing services
-│   ├── __init__.py
-│   ├── downloader.py
-│   ├── recognizer.py
-│   ├── file_handler.py
-│
-├── utils/                       # Utility functions for validation, logging, etc.
-│   ├── __init__.py
-│   ├── validation.py
-│   ├── helpers.py
-│   ├── logger.py
-│
-├── data/                        # Temporary storage for processing files
-│   ├── temp/
-│
-└── tests/                       # Unit tests for services and handlers
-    ├── test_downloader.py
-    ├── test_recognizer.py
+
+### 2️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3️⃣ Configure Credentials
+
+- **ACRCloud**: Add your credentials in `bot.py`:
+  ```python
+  HOST = "https://identify-ap-southeast-1.acrcloud.com"
+  ACCESS_KEY = "your_acrcloud_access_key"
+  ACCESS_SECRET = "your_acrcloud_access_secret"
+  ```
+- **Telegram Bot Token**: Replace `"your_bot_token"` in `bot.py` with your bot token.
+
+### 4️⃣ Run the Bot
+
+```bash
+python bot.py
 ```
 
 ---
 
-## Usage
-1. Start the bot with `/start`.
-2. Send:
-   - An Instagram or YouTube link.
-   - A video, audio file, or voice message.
+## 🧪 Testing
+
+Run the unit tests to ensure the components work as expected:
+
+```bash
+python -m unittest discover
+```
+
+## 📖 Usage Instructions
+
+1. Start the bot on Telegram by sending `/start`.
+2. Share an Instagram reel link with the bot.
 3. The bot will:
-   - Process the input.
-   - Send the video (if it’s under 50MB).
-   - Recognize the song and send its file with metadata.
+   - Download the reel.
+   - Extract audio from the video.
+   - Identify the song and share the details with you.
 
 ---
 
-## Technologies Used
-- **Python**
-- **Telegram Bot API** (via `python-telegram-bot`)
-- **AcrCloud API**
-- **yt-dlp** (for video and audio downloads)
-- **moviepy** (for audio extraction)
+## 🛡️ License
+
+This project is licensed under the [GNU GENERAL PUBLIC LICENSE](LICENSE).
 
 ---
 
-## Contributing
-Feel free to submit issues or pull requests for improvements. Contributions are welcome!
+## 🙌 Acknowledgements
+
+- [Instaloader](https://instaloader.github.io/) for Instagram reel downloads.
+- [ACRCloud](https://www.acrcloud.com/) for song recognition.
+- [FFmpeg](https://ffmpeg.org/) for audio extraction.
 
 ---
-
-## License
-This project is licensed under the MIT License. See `LICENSE` for details.
-
----
-
-## Contact
-For questions or feedback, please contact [manishborikar@proton.me].
