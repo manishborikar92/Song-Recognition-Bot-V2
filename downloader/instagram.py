@@ -8,12 +8,12 @@ def get_first_sentence(caption: str) -> str:
     first_line = next((line for line in lines if line.strip()), "")  # Find the first non-empty line
     return first_line
 
-def download_instagram_reel(url):
+def download_instagram_reel(url, userid):
     # Initialize Instaloader
     L = instaloader.Instaloader()
     
     # Ensure the 'temp/videos' directory exists
-    save_dir = 'temp/videos'
+    save_dir = f'data/{userid}/videos'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     

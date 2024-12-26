@@ -11,3 +11,4 @@ flask
 asyncio
 pydub
 eyed3
+azure-storage-blob

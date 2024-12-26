@@ -2,7 +2,7 @@ import os
 from yt_dlp import YoutubeDL
 import eyed3
 
-def download_song(title, artist):
+def download_song(title, artist, userid):
     """
     Downloads a song as an MP3 based on the title and artist and tags it with artist info.
 
@@ -14,7 +14,7 @@ def download_song(title, artist):
         str: The file path of the downloaded MP3.
     """
     # Ensure the output directory exists
-    output_dir = "temp/audios"
+    output_dir = f"data/{userid}/music"
     os.makedirs(output_dir, exist_ok=True)
 
     # Construct the search query

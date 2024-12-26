@@ -1,10 +1,10 @@
 import os
 from pydub import AudioSegment
 
-def convert_video_to_mp3(video_path):
+def convert_video_to_mp3(video_path, userid):
     try:
         # Ensure the 'temp/audios' directory exists
-        save_dir = 'temp/audios'
+        save_dir = f'data/{userid}/audios'
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
