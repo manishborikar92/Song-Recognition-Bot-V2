@@ -1,5 +1,3 @@
-### `tests/test_recognizer.py`
-
 import unittest
 from services.recognizer import recognize_song
 

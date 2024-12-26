@@ -1,10 +1,10 @@
-### `services/recognizer.py`
-
 from acrcloud.recognizer import ACRCloudRecognizer
 from config import ACRCLOUD_CONFIG
 
+# Initialize the ACRCloud recognizer with the provided config
 acrcloud = ACRCloudRecognizer(ACRCLOUD_CONFIG)
 
+# Recognize a song from an audio file
 def recognize_song(file_path):
     try:
         with open(file_path, "rb") as f:

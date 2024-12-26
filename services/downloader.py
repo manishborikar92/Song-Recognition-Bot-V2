@@ -1,9 +1,8 @@
-### `services/downloader.py`
-
 import yt_dlp
 import os
 from config import TEMP_DIR
 
+# Download video or audio content from a given link
 def download_content(link):
     options = {
         "outtmpl": os.path.join(TEMP_DIR, "%(title)s.%(ext)s"),
@@ -19,6 +18,7 @@ def download_content(link):
         print(f"Download error: {e}")
         return None
 
+# Search and download a song from YouTube by title
 def download_song_from_youtube(song_title):
     options = {
         "outtmpl": os.path.join(TEMP_DIR, f"{song_title}.mp3"),
