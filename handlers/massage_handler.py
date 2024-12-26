@@ -13,7 +13,7 @@ from downloader.youtube import download_youtube_video
 from handlers.acrcloud_handler import recognize_song
 from handlers.membership_handler import check_membership
 from utils.audio_extractor import convert_video_to_mp3
-from utils.clear_data import delete_all
+from utils.clear_data import delete_all, delete_cache
 from tempfile import TemporaryDirectory
 
 # Load environment variables from .env file
@@ -93,7 +93,7 @@ async def handle_message(update: Update, context: CallbackContext):
                         parse_mode='HTML',  # Use HTML formatting
                         reply_to_message_id=update.message.message_id
                     )
-                    video_path, caption = await asyncio.to_thread(download_instagram_reel, url, user_id)
+                    video_path, caption = await asyncio.to_thread(download_instagram_reel, url)
 
                     if not video_path or not caption:
                         await downloading_message.edit_text(
@@ -119,7 +119,7 @@ async def handle_message(update: Update, context: CallbackContext):
                             reply_to_message_id=update.message.message_id
                         )
                         
-                    video_path, caption = await asyncio.to_thread(download_youtube_video, url, user_id)
+                    video_path, caption = await asyncio.to_thread(download_youtube_video, url)
 
                     if not video_path or not caption:
                         await downloading_message.edit_text(
@@ -195,7 +195,7 @@ async def handle_message(update: Update, context: CallbackContext):
                     "🎧 <b>Video downloaded!</b> Now <i>extracting audio...</i> 🎶🔊",
                     parse_mode='HTML'
                 )
-                audio_path = await asyncio.to_thread(convert_video_to_mp3, video_path, user_id)
+                audio_path = await asyncio.to_thread(convert_video_to_mp3, video_path)
 
             # Recognize song
             await downloading_message.edit_text(
@@ -229,7 +229,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 "⬇️ <b>Downloading song...</b> 🎶🚀",
                 parse_mode='HTML'
             )
-            song_path = await asyncio.to_thread(download_song, title, artists, user_id)
+            song_path = await asyncio.to_thread(download_song, title, artists)
 
             if not song_path:
                 await update.message.reply_text(
@@ -280,4 +280,4 @@ async def handle_message(update: Update, context: CallbackContext):
         logger.error(f"Error: {e}")
 
     finally:
-        delete_all()
+        delete_cache()
