@@ -1,6 +1,6 @@
 import tempfile
 import os
-from moviepy.editor import VideoFileClip
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 # Extract audio from a video file and save it as a temporary MP3 file
 def extract_audio(file_path):
