@@ -10,5 +10,10 @@ python-dotenv
 flask
 asyncio
 pydub
+pydrive
 eyed3
-azure-storage-blob
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+
