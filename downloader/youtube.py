@@ -12,45 +12,46 @@ def download_youtube_video(url):
     # Extract the shortcode from the URL (before the ? or the end of the string)
     shortcode = url.split("/")[3].split("?")[0]
 
-    path_exist = search_file(f'data/videos/{shortcode}.mp4')
+    # Paths for saving the video and audio
+    video_path = os.path.join('data/videos', f"{shortcode}.mp4")
 
-    if path_exist:
-        return path_exist, 'Video'
+    # Check if the files already exist
+    if os.path.exists(video_path):
+         return video_path, "@TuneDetectV2BOT"
       
-    else:
-        try:
-            # Set up yt-dlp options
-            ydl_opts = {
-                'format': 'bestvideo+bestaudio/best',  # Get the best video and audio streams
-                'outtmpl': f'data/videos/{shortcode}.%(ext)s',  # Save with the id as filename
-                'noplaylist': True,  # Avoid downloading entire playlists
-                'merge_output_format': 'mp4',  # Merge audio and video into mp4 if needed
-                'postprocessors': [{  # Force conversion to mp4
-                    'key': 'FFmpegVideoConvertor',
-                    'preferedformat': 'mp4',
-                }],
-            }
+    try:
+        # Set up yt-dlp options
+        ydl_opts = {
+            'format': 'bestvideo+bestaudio/best',  # Get the best video and audio streams
+            'outtmpl': f'data/videos/{shortcode}.%(ext)s',  # Save with the id as filename
+            'noplaylist': True,  # Avoid downloading entire playlists
+            'merge_output_format': 'mp4',  # Merge audio and video into mp4 if needed
+            'postprocessors': [{  # Force conversion to mp4
+                'key': 'FFmpegVideoConvertor',
+                'preferedformat': 'mp4',
+            }],
+        }
 
-            # Download the video
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info_dict = ydl.extract_info(url, download=True)
-                
-                # Get the video path after download
-                video_path = ydl.prepare_filename(info_dict)
-                
-                # Replace the file extension with .mp4
-                video_path = video_path.rsplit('.', 1)[0] + '.mp4'
-                
-                # Get the video description (caption)
-                caption = info_dict.get('description', 'No description')
-                
-                # Get the first non-empty line of the description
-                first_sentence = get_first_sentence(caption)
+        # Download the video
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info_dict = ydl.extract_info(url, download=True)
             
-            print('YouTube Video Downloaded')
-            return video_path, first_sentence
-        except Exception as e:
-            return str(e), None
+            # Get the video path after download
+            video_path = ydl.prepare_filename(info_dict)
+            
+            # Replace the file extension with .mp4
+            video_path = video_path.rsplit('.', 1)[0] + '.mp4'
+            
+            # Get the video description (caption)
+            caption = info_dict.get('description', 'No description')
+            
+            # Get the first non-empty line of the description
+            first_sentence = get_first_sentence(caption)
+        
+        print('YouTube Video Downloaded')
+        return video_path, first_sentence
+    except Exception as e:
+        return str(e), None
 
 # # Example usage
 # url = "https://youtu.be/PXGycbkbtW0?si=NqaNyI0kWmWFan7N"

@@ -11,6 +11,9 @@ async def start(update: Update, context: CallbackContext):
         parse_mode='HTML'
     )
 
+async def search(update: Update, context: CallbackContext):
+    print("search")
+    
 async def delete(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     if int(user_id) == int(EXCEPTION_USER_ID):

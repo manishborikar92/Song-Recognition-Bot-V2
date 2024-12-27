@@ -104,6 +104,69 @@ def recognize_song(audio_path, host, access_key, access_secret):
     except Exception as e:
         raise Exception(f"Error recognizing song: {e}")
 
+def get_song_info(song_name):
+    """
+    Searches for the original song name and artist using the ACRCloud API.
+    """
+    API_URL = "https://eu-api-v2.acrcloud.com/api/external-metadata/tracks"
+    API_KEY = ACR_BEARER_TOKEN
+    
+    headers = {
+        'Authorization': f'Bearer {API_KEY}'
+    }
+    params = {
+        'query': json.dumps({"track": song_name}),
+        'format': 'json'
+    }
+
+    try:
+        response = requests.get(API_URL, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        if data.get("data"):
+            song = data["data"][0]
+            title = song.get("name", "Unknown Title")
+            artists = ", ".join(artist["name"] for artist in song.get("artists", []))
+            album = song.get("album", {}).get("name", "Unknown Album")
+            release_date = song.get("album", {}).get("release_date", "Unknown Release Date")
+            youtube_links = [yt.get("link") for yt in song.get("external_metadata", {}).get("youtube", [])]
+            spotify_links = [sp.get("link") for sp in song.get("external_metadata", {}).get("spotify", [])]
+
+            metadata = {
+                "title": title,
+                "artists": artists,
+                "album": album,
+                "release_date": release_date,
+                "youtube_links": youtube_links,
+                "spotify_links": spotify_links,
+            }
+
+            return metadata
+        print("No results found.")
+        return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching song info: {e}")
+        return None
+
+
+# # Example usage
+# if __name__ == "__main__":
+#     # Paths
+#     input_audio_path = r'temp/audios/The Weeknd - Blinding Lights (Official Video).mp3'
+
+#     # ACRCloud credentials from .env
+#     acr_host = os.getenv("ACR_HOST")
+#     acr_access_key = os.getenv("ACR_ACCESS_KEY")
+#     acr_access_secret = os.getenv("ACR_ACCESS_SECRET")
+
+#     if not acr_host or not acr_access_key or not acr_access_secret:
+#         raise ValueError("Missing required environment variables: ACR_HOST, ACR_ACCESS_KEY, ACR_ACCESS_SECRET")
+
+#     # Recognize song
+#     recognize_song(input_audio_path, acr_host, acr_access_key, acr_access_secret)
+
 
 # # Example usage
 # if __name__ == "__main__":

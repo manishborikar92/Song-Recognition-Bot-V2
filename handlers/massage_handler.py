@@ -95,7 +95,7 @@ async def handle_message(update: Update, context: CallbackContext):
                     )
                     video_path, caption = await asyncio.to_thread(download_instagram_reel, url)
 
-                    if not video_path or not caption:
+                    if not video_path:
                         await downloading_message.edit_text(
                         "❌ <b>Invalid URL!</b> Please provide a valid <b>Instagram</b> link. 🌐🔗",
                         parse_mode='HTML'
@@ -121,7 +121,7 @@ async def handle_message(update: Update, context: CallbackContext):
                         
                     video_path, caption = await asyncio.to_thread(download_youtube_video, url)
 
-                    if not video_path or not caption:
+                    if not video_path:
                         await downloading_message.edit_text(
                         "❌ <b>Invalid URL!</b> Please provide a valid <b>Youtube</b> link. 🌐🔗",
                         parse_mode='HTML'
