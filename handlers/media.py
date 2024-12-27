@@ -1,5 +1,6 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
+from db.database import save_user, update_state, get_state
 
 # Define the handler for video messages
 async def process_video(update: Update, context: CallbackContext) -> None:

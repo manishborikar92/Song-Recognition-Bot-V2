@@ -1,4 +1,4 @@
-from telegram import Update
+import logging
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 from config import BOT_TOKEN
 from handlers.command import start
@@ -6,30 +6,37 @@ from handlers.media import process_audio, process_video, process_voice, process_
 from handlers.message import process_text
 from handlers.other_input import process_contact, process_location, process_unknown, process_video_note
 
+# Configure logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.CRITICAL
+)
+logger = logging.getLogger(__name__)
+
+# Global error handler
+async def error_handler(update: object, context: CallbackContext):
+    logger.error(f"Error: {context.error}")
+    if update and update.effective_message:
+        await update.effective_message.reply_text("An error occurred. Please try again later.")
 
 if __name__ == "__main__":
-    BOT_TOKEN = f'{BOT_TOKEN}'
-    # Initialize the application with your bot token
-    app = Application.builder().token(BOT_TOKEN).build()
+    app = Application.builder().token(BOT_TOKEN).concurrent_updates(True).build()  # Enable concurrent updates
 
     # Add the handlers
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, process_text))
+    app.add_handler(MessageHandler(filters.VIDEO, process_video))
+    app.add_handler(MessageHandler(filters.AUDIO, process_audio))
+    app.add_handler(MessageHandler(filters.VOICE, process_voice))
+    app.add_handler(MessageHandler(filters.PHOTO, process_photo))
+    app.add_handler(MessageHandler(filters.ATTACHMENT, process_document))
+    app.add_handler(MessageHandler(filters.LOCATION, process_location))
+    app.add_handler(MessageHandler(filters.CONTACT, process_contact))
+    app.add_handler(MessageHandler(filters.VIDEO_NOTE, process_video_note))
+    app.add_handler(MessageHandler(filters.ALL, process_unknown))
 
-    # Add message handlers for various types of messages
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, process_text))  # Handles non-command text messages
-    app.add_handler(MessageHandler(filters.VIDEO, process_video))  # Handles video messages
-    app.add_handler(MessageHandler(filters.AUDIO, process_audio))  # Handles audio messages
-    app.add_handler(MessageHandler(filters.VOICE, process_voice))  # Handles voice messages
-    app.add_handler(MessageHandler(filters.PHOTO, process_photo))  # Handles photo messages
-    app.add_handler(MessageHandler(filters.ATTACHMENT, process_document))  # Handles document messages
-    app.add_handler(MessageHandler(filters.LOCATION, process_location))  # Handles location messages
-    app.add_handler(MessageHandler(filters.CONTACT, process_contact))  # Handles contact messages
-    app.add_handler(MessageHandler(filters.VIDEO_NOTE, process_video_note))  # Handles video note messages
+    # Add error handler
+    app.add_error_handler(error_handler)
 
-    # Default handler for unknown message types
-    app.add_handler(MessageHandler(filters.ALL, process_unknown))  # Handles any other types of messages
-
-        
     print("Bot Starting...")
-    # Start polling for messages
     app.run_polling()
