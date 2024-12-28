@@ -1,7 +1,6 @@
 import instaloader
 import os
 import requests
-from utils.search_files import search_file
 
 def get_first_sentence(caption: str) -> str:
     # Split the caption by line breaks and get the first non-empty line

@@ -3,6 +3,7 @@ import base64
 import hmac
 import hashlib
 import time
+import json
 import os
 from pydub import AudioSegment
 from dotenv import load_dotenv
@@ -104,51 +105,51 @@ def recognize_song(audio_path, host, access_key, access_secret):
     except Exception as e:
         raise Exception(f"Error recognizing song: {e}")
 
-def get_song_info(song_name):
-    """
-    Searches for the original song name and artist using the ACRCloud API.
-    """
-    API_URL = "https://eu-api-v2.acrcloud.com/api/external-metadata/tracks"
-    API_KEY = ACR_BEARER_TOKEN
+# def get_song_info(song_name):
+#     """
+#     Searches for the original song name and artist using the ACRCloud API.
+#     """
+#     API_URL = "https://eu-api-v2.acrcloud.com/api/external-metadata/tracks"
+#     API_KEY = ACR_BEARER_TOKEN
     
-    headers = {
-        'Authorization': f'Bearer {API_KEY}'
-    }
-    params = {
-        'query': json.dumps({"track": song_name}),
-        'format': 'json'
-    }
+#     headers = {
+#         'Authorization': f'Bearer {API_KEY}'
+#     }
+#     params = {
+#         'query': json.dumps({"track": song_name}),
+#         'format': 'json'
+#     }
 
-    try:
-        response = requests.get(API_URL, headers=headers, params=params)
-        response.raise_for_status()
-        data = response.json()
+#     try:
+#         response = requests.get(API_URL, headers=headers, params=params)
+#         response.raise_for_status()
+#         data = response.json()
 
-        if data.get("data"):
-            song = data["data"][0]
-            title = song.get("name", "Unknown Title")
-            artists = ", ".join(artist["name"] for artist in song.get("artists", []))
-            album = song.get("album", {}).get("name", "Unknown Album")
-            release_date = song.get("album", {}).get("release_date", "Unknown Release Date")
-            youtube_links = [yt.get("link") for yt in song.get("external_metadata", {}).get("youtube", [])]
-            spotify_links = [sp.get("link") for sp in song.get("external_metadata", {}).get("spotify", [])]
+#         if data.get("data"):
+#             song = data["data"][0]
+#             title = song.get("name", "Unknown Title")
+#             artists = ", ".join(artist["name"] for artist in song.get("artists", []))
+#             album = song.get("album", {}).get("name", "Unknown Album")
+#             release_date = song.get("album", {}).get("release_date", "Unknown Release Date")
+#             youtube_links = [yt.get("link") for yt in song.get("external_metadata", {}).get("youtube", [])]
+#             spotify_links = [sp.get("link") for sp in song.get("external_metadata", {}).get("spotify", [])]
 
-            metadata = {
-                "title": title,
-                "artists": artists,
-                "album": album,
-                "release_date": release_date,
-                "youtube_links": youtube_links,
-                "spotify_links": spotify_links,
-            }
+#             metadata = {
+#                 "title": title,
+#                 "artists": artists,
+#                 "album": album,
+#                 "release_date": release_date,
+#                 "youtube_links": youtube_links,
+#                 "spotify_links": spotify_links,
+#             }
 
-            return metadata
-        print("No results found.")
-        return None
+#             return metadata
+#         print("No results found.")
+#         return None
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching song info: {e}")
-        return None
+#     except requests.exceptions.RequestException as e:
+#         print(f"Error fetching song info: {e}")
+#         return None
 
 
 # # Example usage

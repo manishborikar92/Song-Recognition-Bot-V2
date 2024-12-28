@@ -8,7 +8,7 @@ from config import USER_RATE_LIMIT, GROUP_URL, CHANNEL_URL, EXCEPTION_USER_ID, l
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from downloader.instagram import download_instagram_reel
-from downloader.song_downloader import download_song
+from downloader.song_downloader import download_song, send_song_to_telegram
 from downloader.youtube import download_youtube_video
 from handlers.acrcloud_handler import recognize_song
 from handlers.membership_handler import check_membership
@@ -230,6 +230,9 @@ async def handle_message(update: Update, context: CallbackContext):
                 parse_mode='HTML'
             )
             song_path = await asyncio.to_thread(download_song, title, artists)
+            # Call the async send_song_to_telegram
+            await send_song_to_telegram(song_path, title, artists)
+            print("Song sent to Telegram successfully!")
 
             if not song_path:
                 await update.message.reply_text(
@@ -277,7 +280,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 )
 
     except Exception as e:
-        logger.error(f"Error: {e}")
+        print(f"Error: {e}")
 
     finally:
         delete_cache()

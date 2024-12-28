@@ -1,6 +1,5 @@
 import os
 from pydub import AudioSegment
-from utils.search_files import search_file
 
 def convert_video_to_mp3(video_path):
     try:
