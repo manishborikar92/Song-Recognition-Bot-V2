@@ -1,5 +1,6 @@
 import os
 import logging
+import asyncio
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from telegram import Update
 from flask import Flask, request
@@ -39,13 +40,17 @@ def webhook():
         logger.error(f"Error processing update: {e}")
         return 'Error', 500
 
-if __name__ == "__main__":
+async def main():
     if WEBHOOK_URL:
         # Set webhook URL for Telegram Bot only if the URL is available
-        application.bot.set_webhook(url=WEBHOOK_URL)
+        await application.bot.set_webhook(url=WEBHOOK_URL)
         logger.info(f"Webhook set to {WEBHOOK_URL}")
     else:
         logger.error("WEBHOOK_URL not set. Please check your environment variables.")
     
-    # Run the Flask app on the specified host and port
-    app.run(host="0.0.0.0", port=5000)
+    # Do not run Flask app manually in Vercel
+    # app.run(host="0.0.0.0", port=5000)  # Vercel will handle this for you
+
+if __name__ == "__main__":
+    # Run the asynchronous main function
+    asyncio.run(main())
