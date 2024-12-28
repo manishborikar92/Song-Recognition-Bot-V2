@@ -13,8 +13,8 @@ COPY . .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose a port (useful if using webhooks, optional otherwise)
-EXPOSE 8080
+# Expose port 5000 for Flask
+EXPOSE 5000
 
 # Run the bot
 CMD ["python3", "bot.py"]
