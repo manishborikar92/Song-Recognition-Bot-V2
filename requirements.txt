@@ -6,3 +6,4 @@ eyed3
 python-dotenv
 pydub
 flask
+ngrok

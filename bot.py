@@ -3,7 +3,7 @@ import logging
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from telegram import Update
 from flask import Flask, request
-from config import BOT_TOKEN
+from config import BOT_TOKEN, WEBHOOK_URL
 from handlers.command_handler import start, delete, search
 from handlers.massage_handler import handle_message
 
@@ -13,9 +13,6 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-
-# Set the webhook URL (replace with your own public URL when deployed)
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL")  # Set this in your environment variables
 
 # Set up the Telegram bot with webhook
 application = ApplicationBuilder().token(BOT_TOKEN).build()

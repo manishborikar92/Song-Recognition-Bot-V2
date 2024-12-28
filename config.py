@@ -18,6 +18,5 @@ EXCEPTION_USER_ID = os.getenv("EXCEPTION_USER_ID")
 GROUP_URL = "https://t.me/+b4-OKLiKbMoyODY1"
 CHANNEL_URL = "https://t.me/ProjectON3"
 
-# Google Drive API credentials
-CLIENT_SECRET_FILE = os.getenv("GOOGLE_CLIENT_SECRET_FILE")  # Path to 'credentials.json'
-SCOPES = ['https://www.googleapis.com/auth/drive.file']
+# Set the webhook URL (replace with your own public URL when deployed)
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # Set this in your environment variables
