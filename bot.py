@@ -26,15 +26,26 @@ application.add_handler(MessageHandler(filters.VIDEO | filters.AUDIO | filters.V
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # Get the incoming update from Telegram
-    update = Update.de_json(request.get_json(), application.bot)
-    application.process_update(update)
-    return 'OK', 200
+    try:
+        # Log the incoming request for debugging purposes
+        logger.info(f"Received update: {request.get_json()}")
+
+        # Process the incoming update from Telegram
+        update = Update.de_json(request.get_json(), application.bot)
+        application.process_update(update)
+        return 'OK', 200
+    except Exception as e:
+        # Log any error that occurs
+        logger.error(f"Error processing update: {e}")
+        return 'Error', 500
 
 if __name__ == "__main__":
-    # Set webhook URL for Telegram Bot
-    application.bot.set_webhook(url=WEBHOOK_URL)
-    print(f"Webhook set to {WEBHOOK_URL}")
+    if WEBHOOK_URL:
+        # Set webhook URL for Telegram Bot only if the URL is available
+        application.bot.set_webhook(url=WEBHOOK_URL)
+        logger.info(f"Webhook set to {WEBHOOK_URL}")
+    else:
+        logger.error("WEBHOOK_URL not set. Please check your environment variables.")
     
-    # Run the Flask app
+    # Run the Flask app on the specified host and port
     app.run(host="0.0.0.0", port=5000)
