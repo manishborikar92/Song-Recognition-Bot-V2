@@ -15,3 +15,20 @@
 .youtube.com	TRUE	/	TRUE	1735454747	GPS	1
 .youtube.com	TRUE	/	TRUE	0	YSC	XzGaiNu64-E
 .youtube.com	TRUE	/	TRUE	1735457064	SAPISID	KWN18wR25oCkeWHp/AwpqRhttGG_mhCh99
+
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.instagram.com	TRUE	/	TRUE	1736174646	datr	BJRsZc66Zki_RPosVfCWDoP1
+.instagram.com	TRUE	/	TRUE	1736174647	mid	ZWyUBwALAAFJcdjwufPAhm3mAZwR
+.instagram.com	TRUE	/	TRUE	1750250699	ps_n	1
+.instagram.com	TRUE	/	TRUE	1750250699	ps_l	1
+.www.instagram.com	TRUE	/	TRUE	1755425318	igd_ls	%7B%2217843643395448111%22%3A%7B%22c%22%3A%7B%221%22%3A%22HCwRAAAWiGsWooLJnQsTBRbe9Kyh36yyPwA%22%2C%222%22%3A%22GRwVQBwcGAAYABUEAAAWARYAFgAWAAAWKAA%22%7D%2C%22d%22%3A%22ffb3cee6-af6d-4598-8111-49b8d2195447%22%2C%22s%22%3A%220%22%2C%22u%22%3A%22a06ge6%22%7D%7D
+.instagram.com	TRUE	/	TRUE	1766918093	csrftoken	82AlUhhUbotuIknydtT1y6iXapfJJo3K
+.instagram.com	TRUE	/	TRUE	1765450356	ig_did	3449A5B8-FB7D-453A-A1D5-7924C38C5883
+.instagram.com	TRUE	/	TRUE	1765454572	ig_nrcb	1
+.instagram.com	TRUE	/	TRUE	1736073287	wd	1440x731
+.instagram.com	TRUE	/	TRUE	1767004401	sessionid	43648448110%3AuDRa5yWnsHs3Lf%3A18%3AAYfaml1zK3LYxsepRhYgTFzPpOw58PKx5jh5f6e7jA
+.instagram.com	TRUE	/	TRUE	1743244493	ds_user_id	43648448110
+.instagram.com	TRUE	/	TRUE	0	rur	"HIL\05443648448110\0541767004492:01f76717d022daabfeab51e471a7330bf369a3fbf645c1fcbc6faa419965658e633e9665"
