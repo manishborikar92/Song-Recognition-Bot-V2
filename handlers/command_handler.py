@@ -62,8 +62,8 @@ async def search(update: Update, context: CallbackContext):
     song_artist = song_data.get('artist')
     song_album = song_data.get('album', 'Unknown')
     song_release_date = song_data.get('release_date', 'Unknown')
-    youtube_link = song_data.get('youtube_link', '#')
-    spotify_link = song_data.get('spotify_link', '#')
+    youtube_link = song_data.get('youtube_link', f'https://www.youtube.com/results?search_query={song_title}')
+    spotify_link = song_data.get('spotify_link', f'https://open.spotify.com/search/{song_title}')
 
     # Download song
     await downloading_message.edit_text(
@@ -95,6 +95,7 @@ async def search(update: Update, context: CallbackContext):
         try:
             with open(song_path, "rb") as song_file:
                 print(f"Sending file: {song_path}")  # Debugging log
+                await downloading_message.delete()
                 await update.message.reply_audio(
                     audio=song_file,
                     caption=response_message,
@@ -107,6 +108,7 @@ async def search(update: Update, context: CallbackContext):
             await update.message.reply_text("An error occurred while sending the song.")
     else:
         print("File exceeds 50MB limit.")
+        await downloading_message.delete()
         await update.message.reply_text(
             text=(
                 "<b>🚫 Oops!</b> I can't send the song because Telegram Bot has a <b>50MB limit</b>. 📉\n\n"
