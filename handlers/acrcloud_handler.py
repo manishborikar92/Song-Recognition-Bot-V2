@@ -164,8 +164,8 @@ def get_song_info(title: str, artist: str):
                 "artists": artists,
                 "album": album,
                 "release_date": release_date,
-                "youtube_links": youtube_link,
-                "spotify_links": spotify_link,
+                "youtube_link": youtube_link,
+                "spotify_link": spotify_link,
             }
 
         print("No results found.")

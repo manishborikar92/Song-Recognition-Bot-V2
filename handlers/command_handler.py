@@ -81,14 +81,14 @@ async def search(update: Update, context: CallbackContext):
         "👇 Listen and enjoy the song below! 🎶"
     )
 
-    # # Ensure YouTube and Spotify links exist, else fallback to a search URL
-    # youtube_link = youtube_link if youtube_link else f'https://www.youtube.com/results?search_query={song_title}'
-    # spotify_link = spotify_link if spotify_link else f'https://open.spotify.com/search/{song_title}'
+    print(f"YouTube Link: {youtube_link}")
+    print(f"Spotify Link: {spotify_link}")
 
-    # Create inline keyboard buttons for YouTube and Spotify links
     keyboard = [
         [InlineKeyboardButton("YouTube", url=youtube_link), InlineKeyboardButton("Spotify", url=spotify_link)],
     ]
+
+
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     # Check file size
@@ -111,17 +111,21 @@ async def search(update: Update, context: CallbackContext):
             print(f"Error sending audio: {e}")
             await update.message.reply_text("An error occurred while sending the song.")
     else:
-        print("File exceeds 50MB limit.")
-        await downloading_message.delete()
-        await update.message.reply_text(
-            text=(
-                "<b>🚫 Oops!</b> I can't send the song because Telegram Bot has a <b>50MB limit</b>. 📉\n\n"
-                "But don't worry, here is the song info and play buttons! 🎵\n\n" + response_message
-            ),
-            reply_markup=reply_markup,
-            parse_mode='HTML',
-            reply_to_message_id=update.message.message_id
-        )
+        try:
+            print("File exceeds 50MB limit.")
+            await downloading_message.delete()
+            await update.message.reply_text(
+                text=(  # Error message when the file exceeds the limit
+                    "<b>🚫 Oops!</b> I can't send the song because Telegram Bot has a <b>50MB limit</b>. 📉\n\n"
+                    "But don't worry, here is the song info and play buttons! 🎵\n\n" + response_message
+                ),
+                reply_markup=reply_markup,
+                parse_mode='HTML',
+                reply_to_message_id=update.message.message_id
+            )
+        except Exception as e:
+            print(f"Error sending audio: {e}")
+
 
 async def delete(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
