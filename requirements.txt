@@ -6,3 +6,4 @@ pydub
 python-telegram-bot
 python-dotenv
 flask
+eyed3
