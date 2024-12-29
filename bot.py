@@ -6,6 +6,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 from config import BOT_TOKEN
 from handlers.command_handler import start, delete, search
 from handlers.massage_handler import handle_message
+import asyncio
 
 # Configure logging
 logging.basicConfig(level=logging.CRITICAL, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -37,8 +38,10 @@ if __name__ == "__main__":
     application.add_handler(MessageHandler(filters.VIDEO | filters.AUDIO | filters.VOICE, handle_message))
 
     # Set the webhook URL (replace YOUR_RENDER_URL with your actual Render URL)
-    WEBHOOK_URL = f"https://song-recognition-bot-v2.onrender.com/webhook"
-    application.bot.set_webhook(WEBHOOK_URL)
+    WEBHOOK_URL = f"https://akita-causal-rattler.ngrok-free.app/webhook"
+
+    # Use asyncio to await the set_webhook method
+    asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
 
     # Start the Flask app
     port = int(os.environ.get("PORT", 5000))
