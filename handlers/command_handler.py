@@ -44,7 +44,7 @@ async def search(update: Update, context: CallbackContext):
     # Search the song on AcrCloud
     try:
         # Recognize song
-        await downloading_message.edit_text(
+        downloading_message = await update.message.reply_text(
             "🔍 <b>Searching song...</b> 🎶🎧",
             parse_mode='HTML'
         )
