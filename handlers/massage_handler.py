@@ -93,13 +93,21 @@ async def handle_message(update: Update, context: CallbackContext):
 
                     if not video_path:
                         await downloading_message.edit_text(
-                        "❌ <b>Invalid URL!</b> Please provide a valid <b>Instagram</b> link. 🌐🔗",
-                        parse_mode='HTML'
+                            "❌ <b>Invalid URL!</b> Please provide a valid <b>Instagram</b> link. 🌐🔗",
+                            parse_mode='HTML'
                         )
                         raise Exception("Failed to fetch Instagram video.")
 
-                    with open(video_path, "rb") as video:
-                        await update.message.reply_video(video=video)
+                    # Check file size
+                    file_size_mb = os.path.getsize(video_path) / (1024 * 1024)  # Convert bytes to MB
+                    if file_size_mb < 50:
+                        with open(video_path, "rb") as video:
+                            await update.message.reply_video(video=video)
+                    else:
+                        await downloading_message.edit_text(
+                            "<b>🚫 Oops!</b> The video is too large to send because Telegram Bot has a <b>50MB limit</b>. 📉",
+                            parse_mode='HTML'
+                        )
 
                 elif re.match(r"^https?://(www\.)?(youtube\.com|youtu\.be)/.*$", url):
                     if "/shorts" in url:
@@ -115,29 +123,39 @@ async def handle_message(update: Update, context: CallbackContext):
                             reply_to_message_id=update.message.message_id
                         )
                         
-                    video_path, audio_path = await asyncio.to_thread(download_and_extract, url)
+                    video_path, thumbnail_path = await asyncio.to_thread(download_and_extract, url)
 
                     if not video_path:
                         await downloading_message.edit_text(
-                        "❌ <b>Invalid URL!</b> Please provide a valid <b>Youtube</b> link. 🌐🔗",
-                        parse_mode='HTML'
+                            "❌ <b>Invalid URL!</b> Please provide a valid <b>YouTube</b> link. 🌐🔗",
+                            parse_mode='HTML'
                         )
                         raise Exception("Failed to fetch YouTube video.")
 
                     # Check file size
                     file_size_mb = os.path.getsize(video_path) / (1024 * 1024)  # Convert bytes to MB
-                    if file_size_mb < 50:  # File size exceeds 50MB
-                        # Send the video if it's within the limit
+                    if file_size_mb < 50:
                         with open(video_path, "rb") as video:
-                            await update.message.reply_video(video=video) 
+                            if os.path.exists(thumbnail_path):
+                                with open(thumbnail_path, "rb") as thumbnail:
+                                    await update.message.reply_video(
+                                        video=video,
+                                        thumb=thumbnail,
+                                        caption="<b>🎥 Video downloaded successfully!</b>",
+                                        parse_mode="HTML"
+                                    )
+                            else:
+                                await update.message.reply_video(
+                                    video=video,
+                                    caption="<b>🎥 Video downloaded successfully!</b>",
+                                    parse_mode="HTML"
+                                )
                     else:
-                        await update.message.reply_text(
-                        "<b>🚫 Oops!</b> I can't send video because Telegram Bot has a <b>50MB limit</b>. 📉 "
-                        "But don't worry, I'm here to help with <b>other formats</b>! 🎵",
-                        parse_mode='HTML',
-                        reply_to_message_id=update.message.message_id
+                        await downloading_message.edit_text(
+                            "<b>🚫 Oops!</b> The video is too large to send because Telegram Bot has a <b>50MB limit</b>. 📉",
+                            parse_mode='HTML'
                         )
-                
+
                 elif re.match(r"^https?://(www\.)?([\w.-]+)(/.*)?$", url):
                     await update.message.reply_text(
                         "❌ <b>Invalid URL!</b> Please provide a valid <b>Instagram</b> or <b>YouTube</b> link. 🌐🔗",
@@ -145,15 +163,16 @@ async def handle_message(update: Update, context: CallbackContext):
                         reply_to_message_id=update.message.message_id
                     )
                     return
-                
+
                 else:
                     await update.message.reply_text(
-                        "🚫 <b>Hey!</b> Please don't send me text messages. Instead, send me a <b>link</b>, <b>video</b>, <b>audio</b>, or <b>voice message</b> 🎶📹🎤, and I'll process it for you!",
+                        "🚫 <b>Hey!</b> Please send me a <b>link</b>, <b>video</b>, <b>audio</b>, or <b>voice message</b> 🎶📹🎤, "
+                        "and I'll process it for you!",
                         parse_mode='HTML',
                         reply_to_message_id=update.message.message_id
                     )
                     return
-
+                
             elif update.message.video:  # Video file input
                 downloading_message = await update.message.reply_text(
                     "🎬 <b>Processing your uploaded video...</b> <i>Please wait while I work my magic!</i> ✨",

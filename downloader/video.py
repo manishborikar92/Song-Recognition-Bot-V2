@@ -48,8 +48,8 @@ def download_and_extract(url):
 
     # Define options for yt-dlp to download the video
     options = {
-        'format': 'best',  # Initially, set the 'best' format, we'll filter by size later
-        'outtmpl': f'{video_dir}/{video_file_name}',  # Save video in data/audio folder
+        'format': 'bestvideo[height<=360]+bestaudio/best[height<=360]',  # Download video at 360p quality
+        'outtmpl': f'{video_dir}/{video_file_name}',  # Save video in data/video folder
         'noplaylist': True,  # Only download the single video
         'cookiefile': 'youtube_cookies.txt',
     }
@@ -60,7 +60,7 @@ def download_and_extract(url):
             info_dict = ydl.extract_info(url, download=False)  # Get video info without downloading
             formats = info_dict.get('formats', [])
 
-            # Find the best format under 50MB (or remove this part to avoid size restriction)
+            # Find the best format under 50MB
             selected_format = None
             for f in formats:
                 filesize = f.get('filesize')
@@ -74,9 +74,8 @@ def download_and_extract(url):
                 with yt_dlp.YoutubeDL(options) as ydl:
                     ydl.download([url])
             else:
-                # If no suitable format is found under 50MB, try downloading the best format without size restriction
+                # If no suitable format is found under 50MB, download the best format available
                 print("No format under 50MB, downloading the best available format.")
-                options['format'] = 'best'  # Force 'best' format download without size restriction
                 with yt_dlp.YoutubeDL(options) as ydl:
                     ydl.download([url])
                 
