@@ -15,7 +15,7 @@ def generate_song_filename(song_name, ext="mp3"):
 
     return f"{sanitized_song_name}.{ext}"
 
-def download_song(song_name, artist_name=None):
+def download_song(song_name, artist_name):
     """
     Downloads the song, re-encodes to MP3 if necessary, and tags the artist.
     """
