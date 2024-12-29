@@ -1,5 +1,8 @@
-python-telegram-bot
 instaloader
+requests 
+beautifulsoup4
+
+python-telegram-bot
 requests
 yt-dlp
 eyed3

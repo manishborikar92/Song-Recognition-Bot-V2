@@ -7,9 +7,8 @@ from dotenv import load_dotenv
 from config import USER_RATE_LIMIT, GROUP_URL, CHANNEL_URL, EXCEPTION_USER_ID, last_request_time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from downloader.instagram import download_instagram_reel
-from downloader.song_downloader import download_song, send_song_to_telegram
-from downloader.youtube import download_youtube_video
+from downloader.video import download_and_extract
+from downloader.song import download_song
 from handlers.acrcloud_handler import recognize_song
 from handlers.membership_handler import check_membership
 from utils.audio_extractor import convert_video_to_mp3
@@ -25,9 +24,6 @@ logger = logging.getLogger(__name__)
 
 # Handle user messages
 async def handle_message(update: Update, context: CallbackContext):
-    acr_host = os.getenv("ACR_HOST")
-    acr_access_key = os.getenv("ACR_ACCESS_KEY")
-    acr_access_secret = os.getenv("ACR_ACCESS_SECRET")
     downloading_message = None
 
     user_id = update.message.from_user.id
@@ -93,7 +89,7 @@ async def handle_message(update: Update, context: CallbackContext):
                         parse_mode='HTML',  # Use HTML formatting
                         reply_to_message_id=update.message.message_id
                     )
-                    video_path, caption = await asyncio.to_thread(download_instagram_reel, url)
+                    video_path, audio_path = await asyncio.to_thread(download_and_extract, url)
 
                     if not video_path:
                         await downloading_message.edit_text(
@@ -103,7 +99,7 @@ async def handle_message(update: Update, context: CallbackContext):
                         raise Exception("Failed to fetch Instagram video.")
 
                     with open(video_path, "rb") as video:
-                        await update.message.reply_video(video=video, caption=caption)
+                        await update.message.reply_video(video=video)
 
                 elif re.match(r"^https?://(www\.)?(youtube\.com|youtu\.be)/.*$", url):
                     if "/shorts" in url:
@@ -119,7 +115,7 @@ async def handle_message(update: Update, context: CallbackContext):
                             reply_to_message_id=update.message.message_id
                         )
                         
-                    video_path, caption = await asyncio.to_thread(download_youtube_video, url)
+                    video_path, audio_path = await asyncio.to_thread(download_and_extract, url)
 
                     if not video_path:
                         await downloading_message.edit_text(
@@ -133,7 +129,7 @@ async def handle_message(update: Update, context: CallbackContext):
                     if file_size_mb < 50:  # File size exceeds 50MB
                         # Send the video if it's within the limit
                         with open(video_path, "rb") as video:
-                            await update.message.reply_video(video=video, caption=caption) 
+                            await update.message.reply_video(video=video) 
                     else:
                         await update.message.reply_text(
                         "<b>🚫 Oops!</b> I can't send video because Telegram Bot has a <b>50MB limit</b>. 📉 "
@@ -168,7 +164,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 file = await context.bot.get_file(video.file_id)
                 video_path = os.path.join(temp_dir, f"{video.file_id}.mp4")
                 await file.download_to_drive(custom_path=video_path)
-                caption = None
+                audio_path = None
 
             elif update.message.audio or update.message.voice:  # Audio file input
                 downloading_message = await update.message.reply_text(
@@ -190,7 +186,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 return
 
             # Extract audio if video was provided
-            if "video_path" in locals():
+            if not "audio_path" in locals():
                 await downloading_message.edit_text(
                     "🎧 <b>Video downloaded!</b> Now <i>extracting audio...</i> 🎶🔊",
                     parse_mode='HTML'
@@ -202,7 +198,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 "🔍 <b>Recognizing song...</b> 🎶🎧",
                 parse_mode='HTML'
             )
-            song_info = await asyncio.to_thread(recognize_song, audio_path, acr_host, acr_access_key, acr_access_secret)
+            song_info = await asyncio.to_thread(recognize_song, audio_path)
 
             if not song_info or "metadata" not in song_info or not song_info["metadata"].get("music"):
                 await downloading_message.edit_text(
@@ -230,9 +226,6 @@ async def handle_message(update: Update, context: CallbackContext):
                 parse_mode='HTML'
             )
             song_path = await asyncio.to_thread(download_song, title, artists)
-            # Call the async send_song_to_telegram
-            await send_song_to_telegram(song_path, title, artists)
-            print("Song sent to Telegram successfully!")
 
             if not song_path:
                 await update.message.reply_text(

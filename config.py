@@ -9,7 +9,15 @@ load_dotenv()
 USER_RATE_LIMIT = 60  # Allow 1 request per minute per user
 last_request_time = {}
 
+#BOT TOKEN
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# ACRCLOUD
+ACR_HOST = os.getenv("ACR_HOST")
+ACR_ACCESS_KEY = os.getenv("ACR_ACCESS_KEY")
+ACR_ACCESS_SECRET = os.getenv("ACR_ACCESS_SECRET")
+ACR_BEARER_TOKEN = os.getenv("ACR_BEARER_TOKEN")
+ACR_ENDPOINT_URL = os.getenv("ACR_ENDPOINT_URL")
 
 # Group and Channel IDs
 GROUP_ID = os.getenv("GROUP_ID")
