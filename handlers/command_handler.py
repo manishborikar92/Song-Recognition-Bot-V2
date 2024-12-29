@@ -62,8 +62,8 @@ async def search(update: Update, context: CallbackContext):
     song_artist = song_data.get('artist')
     song_album = song_data.get('album', 'Unknown')
     song_release_date = song_data.get('release_date', 'Unknown')
-    youtube_link = song_data.get('youtube_link', f'https://www.youtube.com/results?search_query={song_title}')
-    spotify_link = song_data.get('spotify_link', f'https://open.spotify.com/search/{song_title}')
+    youtube_link = song_data.get('youtube_link')
+    spotify_link = song_data.get('spotify_link')
 
     # Download song
     await downloading_message.edit_text(
@@ -81,12 +81,16 @@ async def search(update: Update, context: CallbackContext):
         "👇 Listen and enjoy the song below! 🎶"
     )
 
-    # Send response
+    # # Ensure YouTube and Spotify links exist, else fallback to a search URL
+    # youtube_link = youtube_link if youtube_link else f'https://www.youtube.com/results?search_query={song_title}'
+    # spotify_link = spotify_link if spotify_link else f'https://open.spotify.com/search/{song_title}'
+
+    # Create inline keyboard buttons for YouTube and Spotify links
     keyboard = [
         [InlineKeyboardButton("YouTube", url=youtube_link), InlineKeyboardButton("Spotify", url=spotify_link)],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    
+
     # Check file size
     file_size_mb = os.path.getsize(song_path) / (1024 * 1024)  # Convert bytes to MB
     print(f"File size: {file_size_mb:.2f} MB")  # Debugging log
@@ -118,7 +122,6 @@ async def search(update: Update, context: CallbackContext):
             parse_mode='HTML',
             reply_to_message_id=update.message.message_id
         )
-
 
 async def delete(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id

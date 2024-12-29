@@ -128,23 +128,44 @@ def get_song_info(title: str, artist: str):
         data = response.json()
 
         if data.get("data"):
+            # Extract song data
             song = data["data"][0]
             title = song.get("name", "Unknown Title")
             artists = ", ".join(artist["name"] for artist in song.get("artists", []))
             album = song.get("album", {}).get("name", "Unknown Album")
             release_date = song.get("album", {}).get("release_date", "Unknown Release Date")
-            youtube_links = [yt.get("link") for yt in song.get("external_metadata", {}).get("youtube", [])]
-            spotify_links = [sp.get("link") for sp in song.get("external_metadata", {}).get("spotify", [])]
             
-            print(f"Song found: {title}")
+            # Extract YouTube and Spotify links
+            youtube_links = [
+                yt.get("link") 
+                for yt in song.get("external_metadata", {}).get("youtube", [])
+                if yt.get("link")
+            ]
+            spotify_links = [
+                sp.get("link") 
+                for sp in song.get("external_metadata", {}).get("spotify", [])
+                if sp.get("link")
+            ]
+            
+            # Use the first link or a default search link
+            youtube_link = youtube_links[0] if youtube_links else f'https://www.youtube.com/results?search_query={title}'
+            spotify_link = spotify_links[0] if spotify_links else f'https://open.spotify.com/search/{title}'
+            
+            # Print results
+            print(f"Title: {title}")
+            print(f"Artists: {artists}")
+            print(f"Album: {album}")
+            print(f"Release Date: {release_date}")
+            print(f"YouTube Link: {youtube_link}")
+            print(f"Spotify Link: {spotify_link}")
             
             return {
                 "title": title,
                 "artists": artists,
                 "album": album,
                 "release_date": release_date,
-                "youtube_links": youtube_links,
-                "spotify_links": spotify_links,
+                "youtube_links": youtube_link,
+                "spotify_links": spotify_link,
             }
 
         print("No results found.")
