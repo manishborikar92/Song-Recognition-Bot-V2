@@ -5,3 +5,4 @@ eyed3
 pydub
 python-telegram-bot
 python-dotenv
+flask

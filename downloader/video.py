@@ -51,6 +51,7 @@ def download_and_extract(url):
         'format': 'best',  # Initially, set the 'best' format, we'll filter by size later
         'outtmpl': f'{video_dir}/{video_file_name}',  # Save video in data/audio folder
         'noplaylist': True,  # Only download the single video
+        'cookiefile': 'youtube_cookies.txt',
     }
 
     try:

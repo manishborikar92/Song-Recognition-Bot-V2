@@ -38,6 +38,7 @@ def download_song(song_name, artist_name=None):
         'audioquality': 1,
         'outtmpl': file_path,  # Save with the correct filename
         'noplaylist': True,
+        'cookiefile': 'youtube_cookies.txt',
     }
 
     search_query = f"{song_name} {artist_name}" if artist_name else song_name
