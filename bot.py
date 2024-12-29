@@ -51,7 +51,7 @@ if __name__ == "__main__":
     application.add_handler(MessageHandler(filters.VIDEO | filters.AUDIO | filters.VOICE, handle_message))
 
     # Set the webhook URL
-    WEBHOOK_URL = f"https://akita-causal-rattler.ngrok-free.app/webhook"
+    WEBHOOK_URL = f"https://song-recognition-bot-v2.onrender.com/webhook"
 
     # Use asyncio to await the set_webhook method
     asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
