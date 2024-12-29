@@ -65,7 +65,7 @@ def main():
     application.add_handler(MessageHandler(filters.VIDEO | filters.AUDIO | filters.VOICE, handle_message))
 
     # Set the webhook URL (make sure it's pointing to your active ngrok or production URL)
-    WEBHOOK_URL = f"https://akita-causal-rattler.ngrok-free.app/webhook"
+    WEBHOOK_URL = f"https://song-recognition-bot-v2.onrender.com/webhook"
     asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
 
     # Start the Flask app with debugging enabled for detailed error logs
