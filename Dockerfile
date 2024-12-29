@@ -1,6 +1,9 @@
 # Use the official lightweight Python image
 FROM python:3.10-slim
 
+RUN python -m venv .venv
+RUN .venv\Scripts\activate
+
 # Install ffmpeg
 RUN apt-get update && apt-get install -y ffmpeg
 
