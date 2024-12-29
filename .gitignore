@@ -1,0 +1,7 @@
+.venv
+__pycache__
+temp
+.env
+data
+edit_text.txt
+client_secrets.json

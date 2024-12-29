@@ -1,0 +1,12 @@
+instaloader
+requests 
+beautifulsoup4
+
+python-telegram-bot
+requests
+yt-dlp
+eyed3
+python-dotenv
+pydub
+flask
+ngrok
