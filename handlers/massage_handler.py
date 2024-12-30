@@ -252,7 +252,7 @@ async def handle_message(update: Update, context: CallbackContext):
                 f"🎧 <b>Album:</b> {album}\n"
                 f"🎶 <b>Genres:</b> {genres}\n"
                 f"📅 <b>Release Date:</b> {release_date}\n\n"
-                "<a href='https://t.me/ProjectON3'>ProjectON3</a> | @TuneDetectBot"
+                "<a href='https://t.me/ProjectON3'>ProjectON3</a>"
             )
 
             # Check file size

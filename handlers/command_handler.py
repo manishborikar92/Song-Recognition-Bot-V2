@@ -4,7 +4,6 @@ import requests
 from telegram import Update
 from telegram.ext import CallbackContext
 from telegram import Update
-import sqlite3
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from utils.clear_data import delete_all
@@ -46,7 +45,8 @@ async def search(update: Update, context: CallbackContext):
         # Recognize song
         downloading_message = await update.message.reply_text(
             "🔍 <b>Searching song...</b> 🎶🎧",
-            parse_mode='HTML'
+            parse_mode='HTML',
+            reply_to_message_id=update.message.message_id
         )
         song_data = await asyncio.to_thread(get_song_info, title, artists)
         if not song_data:
@@ -68,7 +68,8 @@ async def search(update: Update, context: CallbackContext):
     # Download song
     await downloading_message.edit_text(
         "⬇️ <b>Downloading song...</b> 🎶🚀",
-        parse_mode='HTML'
+        parse_mode='HTML',
+        reply_to_message_id=update.message.message_id
     )
     song_path = await asyncio.to_thread(download_song, song_title, song_artist)
 
@@ -78,7 +79,7 @@ async def search(update: Update, context: CallbackContext):
         f"✨ <b>Artists:</b> {song_artist}\n"
         f"🎧 <b>Album:</b> {song_album}\n"
         f"📅 <b>Release Date:</b> {song_release_date}\n\n"
-        "<a href='https://t.me/ProjectON3'>ProjectON3</a> | @TuneDetectBot"
+        "<a href='https://t.me/ProjectON3'>ProjectON3</a>"
     )
 
     print(f"YouTube Link: {youtube_link}")
