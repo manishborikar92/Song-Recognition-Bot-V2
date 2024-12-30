@@ -4,7 +4,7 @@ import time
 import asyncio
 import logging
 from dotenv import load_dotenv
-from config import USER_RATE_LIMIT, GROUP_URL, CHANNEL_URL, EXCEPTION_USER_ID, last_request_time
+from config import USER_RATE_LIMIT, GROUP_URL, CHANNEL_URL, EXCEPTION_USER_IDS, last_request_time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from downloader.instagram import download_instagram_reel
@@ -34,22 +34,22 @@ async def handle_message(update: Update, context: CallbackContext):
     if chat_type in ["group", "supergroup", "channel"]:
         return
 
-    # Check if the user is the exception user
-    if int(user_id) == int(EXCEPTION_USER_ID):
-        print('Owner')  # Log admin behavior
+# Check if the user is in the exception list
+    if int(user_id) in EXCEPTION_USER_IDS:
+        print('Developer')  # Log admin behavior
     else:
         # Rate-limiting logic for other users
         current_time = time.time()
         if user_id in last_request_time and current_time - last_request_time[user_id] < USER_RATE_LIMIT:
             remaining_time = USER_RATE_LIMIT - (current_time - last_request_time[user_id])
             await update.message.reply_text(
-                f"⏳ <b>Please wait {remaining_time:.0f} seconds</b> before making another request.",
+                f"\u23f3 <b>Please wait {remaining_time:.0f} seconds</b> before making another request.",
                 parse_mode='HTML'
             )
             return
 
         # Update the last request time for the user
-        last_request_time[user_id] = current_time      
+        last_request_time[user_id] = current_time     
 
     bot_token = context.bot.token
 
