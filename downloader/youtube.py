@@ -24,7 +24,7 @@ def download_youtube_video(url):
                 }
             ],
             'writethumbnail': True,  # Download thumbnail
-            'cookiefile': 'youtube_cookies.txt',  # Use cookies if needed
+            'cookiefile': 'cookies.txt',  # Use cookies if needed
         }
 
         # Create the videos directory if it doesn't exist
