@@ -15,6 +15,22 @@ async def start(update: Update, context: CallbackContext):
         parse_mode='HTML'
     )
 
+async def help_command(update: Update, context: CallbackContext):
+    help_text = (
+        "<b>🔊 Song Recognition Bot V2 Help</b>\n\n"
+        "Here are the available commands and their usage:\n\n"
+        "- <b>/start</b> - Start the bot and get a welcome message.\n"
+        "- <b>/help</b> - Display this help message.\n"
+        "- <b>/search</b> - Search for a song by name or artist (e.g., 'song name, artist name').\n"
+        "- 📹 Share a video, audio, or voice message - The bot will recognize the song and provide details.\n"
+        "- 🌐 Send a YouTube or Instagram link - The bot will download the video, analyze it, and identify the song.\n\n"
+        "If you encounter any issues, feel free to contact the developer.\n\n"
+        "<a href='https://t.me/ProjectON3'>ProjectON3</a>"
+    )
+    
+    # Send the help text as a message to the user
+    await update.message.reply_text(help_text, parse_mode="HTML")
+
 async def search(update: Update, context: CallbackContext):
     """
     Handles the /search command to find and return matching songs from AcrCloud and download it.
