@@ -2,7 +2,7 @@ import os
 import asyncio
 from telegram.ext import CallbackContext
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from config import EXCEPTION_USER_ID
+from config import EXCEPTION_USER_IDS
 from downloader.song import download_song
 from handlers.acrcloud_handler import get_song_info
 from utils.clear_data import delete_all
@@ -128,7 +128,7 @@ async def search(update: Update, context: CallbackContext):
 
 async def delete(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
-    if int(user_id) == int(EXCEPTION_USER_ID):
+    if int(user_id) == int(EXCEPTION_USER_IDS):
         if delete_all():
             await update.message.reply_text(
                 "<b>Data Deleted</b> 🗑",
