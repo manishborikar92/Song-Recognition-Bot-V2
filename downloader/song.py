@@ -95,10 +95,10 @@ def download_song(song_name, artist_name):
         print(f"Error during download or file processing: {e}")
         return f"Error: {e}"
 
-# # Example usage
-# song_name = 'Sooiyan (From "Guddu Rangeela")'  # Replace with the song name
-# artist_name = "Amit Trivedi, Arijit Singh, Chinmayi Sripada"  # Replace with the artist name (optional)
+# Example usage
+song_name = 'Sooiyan (From "Guddu Rangeela")'  # Replace with the song name
+artist_name = "Amit Trivedi, Arijit Singh, Chinmayi Sripada"  # Replace with the artist name (optional)
 
-# song_path = download_song(song_name, artist_name)
+song_path = download_song(song_name, artist_name)
 
-# print(f"Song saved at: {song_path}")
+print(f"Song saved at: {song_path}")
