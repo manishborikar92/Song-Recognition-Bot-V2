@@ -1,7 +1,4 @@
-import os
 import yt_dlp
-import re
-import asyncio
 
 def get_first_sentence(caption: str) -> str:
     """Get the first non-empty line from the caption."""
@@ -14,7 +11,7 @@ def download_youtube_video(url):
         # Set up yt-dlp options
         ydl_opts = {
             'format': 'bestvideo[height<=360]+bestaudio/best[height<=360]',  # Download video at 360p quality
-            'outtmpl': 'temp/videos/%(id)s.%(ext)s',  # Save with the video id as filename
+            'outtmpl': 'data/videos/%(id)s.%(ext)s',  # Save with the video id as filename
             'noplaylist': True,  # Avoid downloading entire playlists
             'merge_output_format': 'mp4',  # Merge audio and video into mp4 if needed
             'postprocessors': [

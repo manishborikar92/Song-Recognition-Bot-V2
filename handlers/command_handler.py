@@ -1,15 +1,12 @@
 import os
 import asyncio
 import requests
-from telegram import Update
 from telegram.ext import CallbackContext
-from telegram import Update
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes
-from utils.clear_data import delete_all
 from config import EXCEPTION_USER_ID
 from downloader.song import download_song
 from handlers.acrcloud_handler import get_song_info
+from utils.clear_data import delete_all
 
 # Start command handler
 async def start(update: Update, context: CallbackContext):

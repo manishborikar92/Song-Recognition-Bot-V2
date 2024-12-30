@@ -1,6 +1,6 @@
-import instaloader
 import os
 import requests
+import instaloader
 
 def get_first_sentence(caption: str) -> str:
     # Split the caption by line breaks and get the first non-empty line
@@ -13,7 +13,7 @@ def download_instagram_reel(url):
     L = instaloader.Instaloader()
     
     # Ensure the 'temp/videos' directory exists
-    save_dir = 'temp/videos'
+    save_dir = 'data/videos'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     

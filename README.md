@@ -1,6 +1,6 @@
 # 🎵 Song Recognition Bot
 
-A Telegram bot that helps you identify songs from Instagram reels by analyzing audio content using the ACRCloud API. The bot downloads the reel, extracts audio, and provides song details such as title, artist, album, release date, and YouTube link.
+A Telegram bot that helps you identify songs from instgram link, youtube link, video, audo or voice message by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, and provides song file with details such as title, artist, album, release date, and links usch as YouTube and Spotify. This bot also have a `/search` command to get song file.
 
 ---
 
@@ -17,21 +17,33 @@ A Telegram bot that helps you identify songs from Instagram reels by analyzing a
 
 ```plaintext
 Song-Recognition-Bot/
-│
-├── bot.py                   # Main entry point for the bot
-├── .env                     # Environment variables
-├── requirements.txt         # List of Python dependencies
-├── utils/
-│   ├── instagram.py         # Functions to fetch Instagram video and caption
-│   ├── audio_processing.py  # Functions to download and process audio
-│   ├── acrcloud_handler.py          # Functions to interact with ACRCloud API
-│   ├── downloader.py           # Reusable utility functions
-│   ├── cleardata.py           # Reusable utility functions
-│
+│  
 ├── data/
-│   ├── downloads/           # Folder for temporarily storing video and audio files
+│   ├── audios/                # Folder for temporarily storing audio files
+│   ├── music/                 # Folder for temporarily storing song files
+│   └── videos/                # Folder for temporarily storing video files
 │
-└── README.md                # Documentation about the project
+├── downloaders/ 
+│   ├── instagram.py           # Functions to download Instagram video and caption
+│   ├── youtube.py             # Functions to download Youtube video and caption
+│   └── song.py                # Functions to download song file  
+│
+├── handlers/
+│   ├── acrcloud_handler.py    # Functions to recognition of song
+│   ├── command_handler.py     # Functions to hangle commands
+│   ├── message_handler.py     # Functions to handle messages
+│   └── membership_handler.py  # Functions to check channel membership of telgram
+│
+├── utils/
+│   ├── audio_extractor.py     # Functions to extract audio
+│   └── cleardata.py           # Functions to delete files
+│
+├── bot.py                     # Main entry point for the bot 
+├── .env                       # Environment variables 
+├── config.py                  # Configuration
+├── Dockerfile                 # Dockerfile for easy hosting
+├── requirements.txt           # List of Python dependencies
+└── README.md                  # Documentation about the project
 ```
 
 ---
@@ -60,13 +72,13 @@ pip install -r requirements.txt
 
 ### 3️⃣ Configure Credentials
 
-- **ACRCloud**: Add your credentials in `bot.py`:
+- **ACRCloud**: Add your credentials in `config.py`:
   ```python
   HOST = "https://identify-ap-southeast-1.acrcloud.com"
   ACCESS_KEY = "your_acrcloud_access_key"
   ACCESS_SECRET = "your_acrcloud_access_secret"
   ```
-- **Telegram Bot Token**: Replace `"your_bot_token"` in `bot.py` with your bot token.
+- **Telegram Bot Token**: Replace `"your_bot_token"` in `config.py` with your bot token.
 
 ### 4️⃣ Run the Bot
 
@@ -87,11 +99,12 @@ python -m unittest discover
 ## 📖 Usage Instructions
 
 1. Start the bot on Telegram by sending `/start`.
-2. Share an Instagram reel link with the bot.
+2. Share an instgram link, youtube link, video, audo or voice message with the bot.
+3. Use `/search <song name, artist name>` command to search song 
 3. The bot will:
-   - Download the reel.
+   - Download the video.
    - Extract audio from the video.
-   - Identify the song and share the details with you.
+   - Identify the song and share the song with details to you.
 
 ---
 
@@ -103,7 +116,7 @@ This project is licensed under the [GNU GENERAL PUBLIC LICENSE](LICENSE).
 
 ## 🙌 Acknowledgements
 
-- [Instaloader](https://instaloader.github.io/) for Instagram reel downloads.
+- [ProjectON3](https://t.me/ProjectON3) bots official telgram channel.
 - [ACRCloud](https://www.acrcloud.com/) for song recognition.
 - [FFmpeg](https://ffmpeg.org/) for audio extraction.
 

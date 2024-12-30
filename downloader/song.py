@@ -1,8 +1,7 @@
 import os
 import re
-import hashlib
-import yt_dlp
 import eyed3
+import yt_dlp
 import subprocess
 
 def generate_song_filename(song_name, ext="mp3"):
