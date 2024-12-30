@@ -1,38 +1,60 @@
 import os
+import logging
 from pydub import AudioSegment
 
-def convert_video_to_mp3(video_path):
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def convert_video_to_mp3(video_path, max_duration_minutes=2):
+    """
+    Converts a video file to an MP3 audio file, trimming it to the specified duration if necessary.
+
+    Args:
+        video_path (str): Path to the video file.
+        max_duration_minutes (int): Maximum allowed duration of the audio in minutes.
+
+    Returns:
+        str: Path to the extracted audio file, or an error message.
+    """
     try:
         # Define the directory to save audio files
         save_dir = 'data/audios'
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)  # Create the directory if it doesn't exist
+        os.makedirs(save_dir, exist_ok=True)  # Ensure directory exists
 
-        # Get the video filename without extension
-        video_filename = os.path.basename(video_path)
-        audio_filename = os.path.splitext(video_filename)[0] + '.mp3'  # Change extension to .mp3
-        audio_path = os.path.join(save_dir, audio_filename)
+        # Extract filename and define audio path
+        video_name = os.path.splitext(os.path.basename(video_path))[0]
+        audio_path = os.path.join(save_dir, f"{video_name}.mp3")
         
-        # Check if the audio already exists
+        # Skip conversion if the audio already exists
         if os.path.exists(audio_path):
-            print(f"Audio already exists at: {audio_path}")
+            logging.info(f"Audio already exists at: {audio_path}")
             return audio_path
-        
+
         # Convert video to audio using ffmpeg (via pydub)
-        # Load the video file (pydub supports mp4 if ffmpeg is correctly installed)
-        audio = AudioSegment.from_file(video_path, format='mp4')  # 'mp4' is the video format
-        
+        logging.info(f"Processing video: {video_path}")
+        audio = AudioSegment.from_file(video_path)  # Automatically detects format
+
+        # Check and trim audio if it's longer than the maximum allowed duration
+        max_duration_ms = max_duration_minutes * 60 * 1000  # Convert minutes to milliseconds
+        if len(audio) > max_duration_ms:
+            logging.info(f"Audio duration exceeds {max_duration_minutes} minutes. Trimming...")
+            audio = audio[:max_duration_ms]
+
         # Export the audio as mp3
         audio.export(audio_path, format='mp3')
-        
-        print(f'Audio Extracted at: {audio_path}')
+        logging.info(f"Audio extracted at: {audio_path}")
         return audio_path
 
+    except FileNotFoundError:
+        error_msg = f"File not found: {video_path}"
+        logging.error(error_msg)
+        return error_msg
     except Exception as e:
-        print(f"Error: {e}")
-        return str(e)
+        error_msg = f"An error occurred: {e}"
+        logging.error(error_msg)
+        return error_msg
 
 # # Example usage
 # video_path = 'data/videos/Q-FzRg6V-b4.mp4'
 # audio_path = convert_video_to_mp3(video_path)
-# print(f"Converted audio path: {audio_path}")
+# logging.info(f"Converted audio path: {audio_path}")
