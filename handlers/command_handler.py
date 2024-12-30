@@ -1,6 +1,5 @@
 import os
 import asyncio
-import requests
 from telegram.ext import CallbackContext
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from config import EXCEPTION_USER_ID

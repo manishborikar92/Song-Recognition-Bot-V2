@@ -180,7 +180,7 @@ def get_song_info(title: str, artist: str):
 # # Example usage
 # if __name__ == "__main__":
 #     # Paths
-#     input_audio_path = r'temp/audios/The Weeknd - Blinding Lights (Official Video).mp3'
+#     input_audio_path = r'data/audios/The Weeknd - Blinding Lights (Official Video).mp3'
 
 #     # ACRCloud credentials from .env
 #     acr_host = os.getenv("ACR_HOST")
@@ -197,7 +197,7 @@ def get_song_info(title: str, artist: str):
 # # Example usage
 # if __name__ == "__main__":
 #     # Paths
-#     input_audio_path = r'temp/audios/The Weeknd - Blinding Lights (Official Video).mp3'
+#     input_audio_path = r'data/audios/The Weeknd - Blinding Lights (Official Video).mp3'
 
 #     # ACRCloud credentials from .env
 #     acr_host = os.getenv("ACR_HOST")
