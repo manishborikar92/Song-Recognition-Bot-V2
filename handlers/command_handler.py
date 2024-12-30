@@ -121,16 +121,19 @@ async def search(update: Update, context: CallbackContext):
             )
         except Exception as e:
             print(f"Error sending audio: {e}")
+    
+        finally:
+            delete_all()
 
 
 async def delete(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     if int(user_id) == int(EXCEPTION_USER_ID):
-        delete_all()
-        await update.message.reply_text(
-            "<b>Data Deleted</b> 🗑",
-            parse_mode='HTML'
-        )
+        if delete_all():
+            await update.message.reply_text(
+                "<b>Data Deleted</b> 🗑",
+                parse_mode='HTML'
+            )
     else:
         await update.message.reply_text("❌")
         await update.message.reply_text("<b>You are not the owner. Permission denied.</b>", parse_mode='HTML')

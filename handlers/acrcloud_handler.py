@@ -85,7 +85,6 @@ def recognize_song(audio_path):
             )
 
         response_data = response.json()
-        print("Response JSON:", response_data)
 
         # Handle errors
         if response_data.get("status", {}).get("code") != 0:
