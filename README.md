@@ -6,10 +6,11 @@ A Telegram bot that helps you identify songs from instgram link, youtube link, v
 
 ## 🚀 Features
 
-- Download Instagram reels from links shared by users.
-- Extract audio from the reels.
+- Download video from link shared by users.
+- Send downloaded video
 - Identify songs using the ACRCloud API.
-- Share song details with users, including title, artist, album, and release date.
+- Share song file and details with users, including title, artist, album, and release date, and links usch as YouTube and Spotify.
+- This bot also have a `/search` command to get song file.
 
 ---
 
