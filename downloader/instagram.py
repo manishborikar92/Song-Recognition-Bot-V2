@@ -29,7 +29,7 @@ def download_instagram_reel(url):
 
     # Extract the shortcode from the URL
     try:
-        shortcode = url.rstrip('/').split("/")[-1]
+        shortcode = url.split("/")[-2]
         if not shortcode:
             raise ValueError("Invalid Instagram URL. Could not extract shortcode.")
     except (IndexError, ValueError) as e:
