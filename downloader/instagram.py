@@ -1,67 +1,87 @@
 import os
+import logging
 import requests
 import instaloader
 
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 def get_first_sentence(caption: str) -> str:
     """Get the first non-empty line from the caption."""
-    lines = caption.split('\n')
-    first_line = next((line for line in lines if line.strip()), "")  # Find the first non-empty line
-    return first_line
+    return next((line.strip() for line in caption.splitlines() if line.strip()), "No caption available")
 
 def download_instagram_reel(url):
+    """
+    Downloads an Instagram reel and extracts the first sentence of its caption.
+
+    Args:
+        url (str): Instagram reel URL.
+
+    Returns:
+        tuple: (str, str) Video file path and the first sentence of the caption, or an error message.
+    """
     # Initialize Instaloader
     L = instaloader.Instaloader()
-    
-    # Define the directory to save videos
+
+    # Directory to save videos
     save_dir = 'data/videos'
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)  # Create the directory if it doesn't exist
-    
+    os.makedirs(save_dir, exist_ok=True)
+
     # Extract the shortcode from the URL
     try:
-        shortcode = url.split("/")[-2]
+        shortcode = url.rstrip('/').split("/")[-1]
         if not shortcode:
             raise ValueError("Invalid Instagram URL. Could not extract shortcode.")
-    except IndexError:
+    except (IndexError, ValueError) as e:
+        logging.error(e)
         return None, "Invalid URL format."
 
     # Define the file path for the video
     video_path = os.path.join(save_dir, f"{shortcode}.mp4")
-    
-    # Check if the video already exists
+
+    # Skip download if the video already exists
     if os.path.exists(video_path):
-        print(f"Instagram video already exists at {video_path}")
+        logging.info(f"Instagram video already exists at: {video_path}")
         return video_path, "Video already exists."
 
-    # Fetch the post using the shortcode
     try:
+        # Fetch the post using the shortcode
         post = instaloader.Post.from_shortcode(L.context, shortcode)
-        
-        # Check if it's a Reel (video post)
-        if post.is_video:
-            # Get the video URL
-            video_url = post.video_url
-            caption = post.caption if post.caption else "No caption"
-            
-            # Get the first non-empty line of the caption
-            first_sentence = get_first_sentence(caption)
-            
-            # Download the video using requests
-            response = requests.get(video_url, stream=True)
+
+        # Verify if it's a video post
+        if not post.is_video:
+            logging.warning("The provided URL does not point to a reel (video).")
+            return None, "The provided URL does not point to a reel (video)."
+
+        # Get the video URL and caption
+        video_url = post.video_url
+        caption = post.caption or "No caption available"
+
+        # Extract the first sentence of the caption
+        first_sentence = get_first_sentence(caption)
+
+        # Download the video
+        logging.info("Downloading Instagram reel...")
+        with requests.get(video_url, stream=True) as response:
             response.raise_for_status()  # Raise an exception for HTTP errors
             with open(video_path, 'wb') as video_file:
-                for chunk in response.iter_content(chunk_size=8192):
+                for chunk in response.iter_content(chunk_size=64 * 1024):  # 64 KB chunks
                     video_file.write(chunk)
-                    
-            print('Instagram Reel Downloaded')
-            return video_path, first_sentence
-        else:
-            return None, "The provided URL does not point to a reel (video)."
-    except Exception as e:
-        print(f"Error: {e}")
-        return None, str(e)
 
-# # Example usage
-# url = "https://www.instagram.com/reel/DDMhHzkT6m3/?igshid=ZW1yYndoN2piZGM4"
-# video_path, caption = download_instagram_reel(url)
-# print(f"Downloaded video path: {video_path}\nCaption: {caption}")
+        logging.info("Instagram reel downloaded successfully.")
+        return video_path, first_sentence
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request error: {e}")
+        return None, f"Request error: {e}"
+    except instaloader.exceptions.InstaloaderException as e:
+        logging.error(f"Instaloader error: {e}")
+        return None, f"Instaloader error: {e}"
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        return None, f"Unexpected error: {e}"
+
+# Example usage
+# test_url = "https://www.instagram.com/reel/DDMhHzkT6m3/"
+# video_path, caption = download_instagram_reel(test_url)
+# logging.info(f"Downloaded video path: {video_path}\nCaption: {caption}")
