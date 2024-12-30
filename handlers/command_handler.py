@@ -78,7 +78,7 @@ async def search(update: Update, context: CallbackContext):
         f"✨ <b>Artists:</b> {song_artist}\n"
         f"🎧 <b>Album:</b> {song_album}\n"
         f"📅 <b>Release Date:</b> {song_release_date}\n\n"
-        "👇 Listen and enjoy the song below! 🎶"
+        "<a href='https://t.me/ProjectON3'>ProjectON3</a> | @TuneDetectBot"
     )
 
     print(f"YouTube Link: {youtube_link}")
