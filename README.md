@@ -61,8 +61,8 @@ Song-Recognition-Bot/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/music-finder-bot.git
-cd music-finder-bot
+git clone https://github.com/manishborikar92/Song-Recognition-Bot-V2.git
+cd Song-Recognition-Bot-V2
 ```
 
 ### 2. Install Dependencies
@@ -76,7 +76,7 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory and add the following:
 
 ```env
-ACR_HOST=https://identify-ap-southeast-1.acrcloud.com
+ACR_HOST=your_acr_host_url
 ACR_ACCESS_KEY=your_acrcloud_access_key
 ACR_ACCESS_SECRET=your_acrcloud_access_secret
 ACR_ENDPOINT_URL=https://eu-api-v2.acrcloud.com/api/external-metadata/tracks
@@ -84,8 +84,8 @@ ACR_BEARER_TOKEN=your_acrcloud_bearer_token
 BOT_TOKEN=your_telegram_bot_token
 GROUP_ID=-1002267600531
 CHANNEL_ID=-1002213319552
-EXCEPTION_USER_ID=1997670957
-WEBHOOK_URL=https://song-recognition-bot-v2.vercel.app/webhook
+EXCEPTION_USER_ID=your_user_id
+WEBHOOK_URL=<insert_render_or_railway_website_url_here>
 ```
 
 ### 4. Run the Bot
@@ -96,7 +96,7 @@ python bot.py
 
 ---
 
-## 🐳 Deploying with Docker
+## 🐳 Deploying with Docker (Optional)
 
 ### 1. Build the Docker Image
 
@@ -144,8 +144,8 @@ python -m unittest discover
 2. Share an Instagram link, YouTube link, video, audio, or voice message with the bot.
 3. Use `/search <song name, artist name>` command to search for a song.
 4. The bot will:
-   - Download the video.
-   - Extract audio from the video.
+   - Download the video from link.
+   - Send video to user.
    - Identify the song and share it with details.
 
 ---
