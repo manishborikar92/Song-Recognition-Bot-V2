@@ -61,7 +61,7 @@ def download_instagram_reel(url):
         print(f"Error: {e}")
         return None, str(e)
 
-# Example usage
-url = "https://www.instagram.com/reel/DDMhHzkT6m3/?igshid=ZW1yYndoN2piZGM4"
-video_path, caption = download_instagram_reel(url)
-print(f"Downloaded video path: {video_path}\nCaption: {caption}")
+# # Example usage
+# url = "https://www.instagram.com/reel/DDMhHzkT6m3/?igshid=ZW1yYndoN2piZGM4"
+# video_path, caption = download_instagram_reel(url)
+# print(f"Downloaded video path: {video_path}\nCaption: {caption}")

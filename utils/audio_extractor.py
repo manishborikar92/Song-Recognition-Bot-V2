@@ -20,7 +20,8 @@ def convert_video_to_mp3(video_path):
         # Export the audio as mp3
         audio.export(audio_path, format='mp3')
         
-        print('Audio Extracted')
+        print(f'Audio Extracted at: {audio_path}')
+        
         return audio_path
     except Exception as e:
         return str(e)

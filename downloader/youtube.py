@@ -1,3 +1,4 @@
+import os
 import yt_dlp
 
 def get_first_sentence(caption: str) -> str:
@@ -26,8 +27,22 @@ def download_youtube_video(url):
             'cookiefile': 'youtube_cookies.txt',  # Use cookies if needed
         }
 
+        # Create the videos directory if it doesn't exist
+        os.makedirs("data/videos", exist_ok=True)
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(url, download=False)  # Extract info first without downloading
+            
+            # Get the video id (shortcode)
+            video_id = info_dict.get('id')
+            if not video_id:
+                return None, "Failed to retrieve video ID."
+
+            # Check if the video already exists
+            video_path = os.path.join("data/videos", f"{video_id}.mp4")
+            if os.path.exists(video_path):
+                print(f"Youtube video already exists at {video_path}")
+                return video_path, "Video already exists."
 
             # Check video size before downloading
             filesize = info_dict.get('filesize', None) or info_dict.get('filesize_approx', 0)
@@ -37,11 +52,8 @@ def download_youtube_video(url):
             # Proceed to download
             info_dict = ydl.extract_info(url, download=True)
 
-            # Get the video path after download
-            video_path = ydl.prepare_filename(info_dict)
-
             # Replace the file extension with .mp4
-            video_path = video_path.rsplit('.', 1)[0] + '.mp4'
+            video_path = ydl.prepare_filename(info_dict).rsplit('.', 1)[0] + '.mp4'
 
             # Get the video description (caption)
             caption = info_dict.get('description', 'No description')
@@ -55,7 +67,7 @@ def download_youtube_video(url):
     except Exception as e:
         return None, str(e)
 
-# Example usage
+# # Example usage
 # url = "https://youtu.be/PXGycbkbtW0?si=NqaNyI0kWmWFan7N"
 # video_path, description = download_youtube_video(url)
 # print(f"Downloaded video path: {video_path}\nDescription: {description}")
