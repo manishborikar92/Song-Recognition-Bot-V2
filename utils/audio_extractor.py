@@ -2,9 +2,6 @@ import os
 import logging
 from pydub import AudioSegment
 
-# Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 def convert_video_to_mp3(video_path, max_duration_minutes=2):
     """
     Converts a video file to an MP3 audio file, trimming it to the specified duration if necessary.

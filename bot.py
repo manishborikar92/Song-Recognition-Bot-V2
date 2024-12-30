@@ -9,7 +9,17 @@ from handlers.massage_handler import handle_message
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)  
+
+# Get a logger instance
+logger = logging.getLogger(__name__)
+
+# Suppress unnecessary logs from the Telegram API and its dependencies
+logging.getLogger("telegram").setLevel(logging.WARNING)  # For the main telegram logger
+logging.getLogger("telegram.bot").setLevel(logging.WARNING)  # For bot-specific logs
+logging.getLogger("telegram.request").setLevel(logging.WARNING)  # For request-related logs
+logging.getLogger("telegram.vendor.ptb_urllib3").setLevel(logging.WARNING)  # For telegram's urllib3 logs
+logging.getLogger("httpx").setLevel(logging.WARNING)  # For httpx logs (since telegram internally uses httpx)
+logging.getLogger("urllib3").setLevel(logging.WARNING)  # For general HTTP requests
 
 # Flask app for Render
 app = Flask(__name__)
