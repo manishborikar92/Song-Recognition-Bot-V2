@@ -59,7 +59,7 @@ async def search(update: Update, context: CallbackContext):
 
     # Song details
     song_title = song_data.get('title')
-    song_artist = song_data.get('artist')
+    song_artist = song_data.get('artists')
     song_album = song_data.get('album', 'Unknown')
     song_release_date = song_data.get('release_date', 'Unknown')
     youtube_link = song_data.get('youtube_link')
