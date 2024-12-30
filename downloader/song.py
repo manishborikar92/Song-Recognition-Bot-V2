@@ -21,6 +21,11 @@ def download_song(song_name, artist_name):
     music_dir = 'data/music'
     os.makedirs(music_dir, exist_ok=True)
 
+    # Check for cookies file
+    cookies_file = 'cookies.txt'
+    if not os.path.exists(cookies_file):
+        raise FileNotFoundError(f"Cookies file '{cookies_file}' not found. Please export cookies and place the file in the script directory.")
+
     # Generate the filename based on the song name and artist
     filename = generate_song_filename(song_name)
     file_path = os.path.join(music_dir, filename)
@@ -35,9 +40,9 @@ def download_song(song_name, artist_name):
         'format': 'bestaudio/best',
         'extractaudio': True,
         'audioquality': 1,
-        'outtmpl': file_path,  # Save with the correct filename
+        'outtmpl': file_path,
         'noplaylist': True,
-        'cookiefile': 'cookies.txt',
+        'cookiefile': cookies_file,  # Path to cookies file
     }
 
     search_query = f"{song_name} {artist_name}" if artist_name else song_name
