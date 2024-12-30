@@ -1,14 +1,15 @@
 import os
 import asyncio
-from telegram.ext import CallbackContext
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CallbackContext, CallbackContext
 from config import EXCEPTION_USER_IDS
 from downloader.song import download_song
 from handlers.acrcloud_handler import get_song_info
-from utils.clear_data import delete_all
+from utils.cleardata import delete_all
+
 
 # Start command handler
-async def start(update: Update, context: CallbackContext):
+async def start_command(update: Update, context: CallbackContext):
     await update.message.reply_text(
         "🎵 <b>Hello there!</b> I’m <b>@TuneDetectBot</b>, your personal music detective powered by <a href='https://t.me/ProjectON3'>ProjectON3</a>. 🎶\n\n"
         "✨ Simply send me a <b>URL</b>, upload a <b>file</b>, or send a <b>voice message</b>, and I'll work my magic to identify the song for you! 🚀",
@@ -17,31 +18,27 @@ async def start(update: Update, context: CallbackContext):
 
 async def help_command(update: Update, context: CallbackContext):
     help_text = (
-        "<b>🔊 Song Recognition Bot V2 Help</b>\n\n"
+        "<b>🔊 Song Recognition Bot Help</b>\n\n"
         "Here are the available commands and their usage:\n\n"
-        "- <b>/start</b> - Start the bot and get a welcome message.\n"
-        "- <b>/help</b> - Display this help message.\n"
-        "- <b>/search</b> - Search for a song by name or artist (e.g., 'song name, artist name').\n"
-        "- 📹 Share a video, audio, or voice message - The bot will recognize the song and provide details.\n"
-        "- 🌐 Send a YouTube or Instagram link - The bot will download the video, analyze it, and identify the song.\n\n"
-        "If you encounter any issues, feel free to contact the developer.\n\n"
+        "- <b>/start</b> - Start the bot and get a welcome message. 🤖✨\n"
+        "- <b>/help</b> - Display this help message. ❓📖\n"
+        "- <b>/search</b> - Search for a song by name or artist (e.g., 'song name, artist name'). 🔍🎶\n"
+        "- 📹 Share a video, audio, or voice message - The bot will recognize the song and provide details. 🎧🎵\n"
+        "- 🌐 Send a YouTube or Instagram link - The bot will download the video, analyze it, and identify the song. 🎥🎶\n\n"
+        "For support or issues, feel free to contact the developer! 😊\n\n"
         "<a href='https://t.me/ProjectON3'>ProjectON3</a>"
     )
     
     # Send the help text as a message to the user
     await update.message.reply_text(help_text, parse_mode="HTML")
 
-async def search(update: Update, context: CallbackContext):
+async def search_command(update: Update, context: CallbackContext):
     """
     Handles the /search command to find and return matching songs from AcrCloud and download it.
-
-    Args:
-        update (telegram.Update): The incoming update from Telegram.
-        context (telegram.ext.ContextTypes.DEFAULT_TYPE): The context for the command.
     """
     downloading_message = None
     if len(context.args) == 0:
-        await update.message.reply_text("Usage: /search <song title> or /search <song title>, <artist name>")
+        await update.message.reply_text("🎵 Wanna find a song?\n\n Use: /search <song title> or /search <song title>, <artist name> 🔍✨")
         return
 
     # Combine arguments and separate the title and artists by comma
@@ -56,16 +53,16 @@ async def search(update: Update, context: CallbackContext):
     try:
         # Recognize song
         downloading_message = await update.message.reply_text(
-            "🔍 <b>Searching song...</b> 🎶🎧",
+            "🔍 <b>Hunting for the track...</b> 🎶🎧",
             parse_mode='HTML',
             reply_to_message_id=update.message.message_id
         )
         song_data = await asyncio.to_thread(get_song_info, title, artists)
         if not song_data:
-            await update.message.reply_text("No matching song found.")
+            await downloading_message.edit_text("❌ Oops! No matching song found.")
             return
     except Exception as e:
-        await update.message.reply_text(f"Error searching for the song: {str(e)}")
+        await downloading_message.edit_text(f"⚠️ Something went wrong while searching for the song: {str(e)}")
         print(f"Error searching for the song: {str(e)}")
         return
 
@@ -79,14 +76,18 @@ async def search(update: Update, context: CallbackContext):
 
     # Download song
     await downloading_message.edit_text(
-        "⬇️ <b>Downloading song...</b> 🎶🚀",
+        "⬇️ <b>Getting your jam...</b> 🎶🚀",
         parse_mode='HTML',
     )
     song_path = await asyncio.to_thread(download_song, song_title, song_artist)
 
+    if not song_path:
+        await downloading_message.edit_text("❌ Oops! Can't download song.")
+        return
+
     # Prepare the message with the song details and links
     response_message = (
-        f"🎶 <b>Song Found: {song_title}</b>\n\n"
+        f"🎶 <b>Found the track: {song_title}</b>\n\n"
         f"✨ <b>Artists:</b> {song_artist}\n"
         f"🎧 <b>Album:</b> {song_album}\n"
         f"📅 <b>Release Date:</b> {song_release_date}\n\n"
@@ -121,15 +122,15 @@ async def search(update: Update, context: CallbackContext):
             print("Song sent successfully.")  # Debugging log
         except Exception as e:
             print(f"Error sending audio: {e}")
-            await update.message.reply_text("An error occurred while sending the song.")
+            await update.message.reply_text("⚠️ Oops! Something went wrong while sending the song.")
     else:
         try:
             print("File exceeds 50MB limit.")
             await downloading_message.delete()
             await update.message.reply_text(
                 text=(  # Error message when the file exceeds the limit
-                    "<b>🚫 Oops!</b> I can't send the song because Telegram Bot has a <b>50MB limit</b>. 📉\n\n"
-                    "But don't worry, here is the song info and play buttons! 🎵\n\n" + response_message
+                    "<b>🚫 Uh-oh!</b> I can't send the song because it's too big (>50MB). 📉\n\n"
+                    "But no worries, here’s all the details and the play buttons! 🎧🎶\n\n" + response_message
                 ),
                 reply_markup=reply_markup,
                 parse_mode='HTML',
@@ -141,10 +142,9 @@ async def search(update: Update, context: CallbackContext):
         finally:
             delete_all()
 
-
-async def delete(update: Update, context: CallbackContext):
+async def delete_command(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
-    if int(user_id) == int(EXCEPTION_USER_IDS):
+    if int(user_id) in EXCEPTION_USER_IDS:
         if delete_all():
             await update.message.reply_text(
                 "<b>Data Deleted</b> 🗑",
