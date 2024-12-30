@@ -1,6 +1,6 @@
 # 🎵 Song Recognition Bot
 
-A Telegram bot that helps you identify songs from Instagram links, YouTube links, videos, audio files, or voice messages by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, and provides the song file with details such as title, artist, album, release date, and links like YouTube and Spotify. This bot also features a `/search` command to get the song file.
+A Telegram bot that helps you identify songs from Instagram links, YouTube links, videos, audio files, or voice messages by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, recognize song and provides the song file with details such as title, artist, album, release date, and links like YouTube and Spotify. This bot also features a `/search` command to get the song file.
 
 ---
 
