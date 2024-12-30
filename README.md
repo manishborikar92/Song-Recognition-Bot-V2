@@ -1,16 +1,16 @@
 # 🎵 Song Recognition Bot
 
-A Telegram bot that helps you identify songs from instgram link, youtube link, video, audo or voice message by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, and provides song file with details such as title, artist, album, release date, and links usch as YouTube and Spotify. This bot also have a `/search` command to get song file.
+A Telegram bot that helps you identify songs from Instagram links, YouTube links, videos, audio files, or voice messages by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, and provides the song file with details such as title, artist, album, release date, and links like YouTube and Spotify. This bot also features a `/search` command to get the song file.
 
 ---
 
 ## 🚀 Features
 
-- Download video from link shared by users.
-- Send downloaded video
+- Download videos from links shared by users.
+- Send downloaded videos.
 - Identify songs using the ACRCloud API.
-- Share song file and details with users, including title, artist, album, and release date, and links usch as YouTube and Spotify.
-- This bot also have a `/search` command to get song file.
+- Share song files and details with users, including title, artist, album, release date, and links like YouTube and Spotify.
+- `/search` command to fetch song files directly.
 
 ---
 
@@ -24,23 +24,23 @@ Song-Recognition-Bot/
 │   ├── music/                 # Folder for temporarily storing song files
 │   └── videos/                # Folder for temporarily storing video files
 │
-├── downloaders/ 
-│   ├── instagram.py           # Functions to download Instagram video and caption
-│   ├── youtube.py             # Functions to download Youtube video and caption
-│   └── song.py                # Functions to download song file  
+├── downloaders/
+│   ├── instagram.py           # Functions to download Instagram videos and captions
+│   ├── youtube.py             # Functions to download YouTube videos and captions
+│   └── song.py                # Functions to download song files  
 │
 ├── handlers/
-│   ├── acrcloud_handler.py    # Functions to recognition of song
-│   ├── command_handler.py     # Functions to hangle commands
+│   ├── acrcloud_handler.py    # Functions for song recognition
+│   ├── command_handler.py     # Functions to handle commands
 │   ├── message_handler.py     # Functions to handle messages
-│   └── membership_handler.py  # Functions to check channel membership of telgram
+│   └── membership_handler.py  # Functions to check Telegram channel membership
 │
 ├── utils/
 │   ├── audio_extractor.py     # Functions to extract audio
-│   └── cleardata.py           # Functions to delete files
+│   └── cleardata.py           # Functions to delete temporary files
 │
-├── bot.py                     # Main entry point for the bot 
-├── .env                       # Environment variables 
+├── bot.py                     # Main entry point for the bot
+├── .env                       # Environment variables
 ├── config.py                  # Configuration
 ├── Dockerfile                 # Dockerfile for easy hosting
 ├── requirements.txt           # List of Python dependencies
@@ -58,34 +58,75 @@ Song-Recognition-Bot/
 - Telegram Bot API token
 - [FFmpeg](https://ffmpeg.org/) installed on your system
 
-### 1️⃣ Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/music-finder-bot.git
 cd music-finder-bot
 ```
 
-### 2️⃣ Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Configure Credentials
+### 3. Configure Environment Variables
 
-- **ACRCloud**: Add your credentials in `config.py`:
-  ```python
-  HOST = "https://identify-ap-southeast-1.acrcloud.com"
-  ACCESS_KEY = "your_acrcloud_access_key"
-  ACCESS_SECRET = "your_acrcloud_access_secret"
-  ```
-- **Telegram Bot Token**: Replace `"your_bot_token"` in `config.py` with your bot token.
+Create a `.env` file in the root directory and add the following:
 
-### 4️⃣ Run the Bot
+```env
+ACR_HOST=https://identify-ap-southeast-1.acrcloud.com
+ACR_ACCESS_KEY=your_acrcloud_access_key
+ACR_ACCESS_SECRET=your_acrcloud_access_secret
+ACR_ENDPOINT_URL=https://eu-api-v2.acrcloud.com/api/external-metadata/tracks
+ACR_BEARER_TOKEN=your_acrcloud_bearer_token
+BOT_TOKEN=your_telegram_bot_token
+GROUP_ID=-1002267600531
+CHANNEL_ID=-1002213319552
+EXCEPTION_USER_ID=1997670957
+WEBHOOK_URL=https://song-recognition-bot-v2.vercel.app/webhook
+```
+
+### 4. Run the Bot
 
 ```bash
 python bot.py
 ```
+
+---
+
+## 🐳 Deploying with Docker
+
+### 1. Build the Docker Image
+
+```bash
+docker build -t song-recognition-bot .
+```
+
+### 2. Run the Container
+
+```bash
+docker run -d --env-file .env --name song-recognition-bot song-recognition-bot
+```
+
+---
+
+## 🌐 Deploying on Railway
+
+1. Create a new project on [Railway](https://railway.app/).
+2. Connect your GitHub repository.
+3. Add environment variables in the "Settings" section using the `.env` file values.
+4. Deploy the project.
+
+---
+
+## 🌐 Deploying on Render
+
+1. Create a new service on [Render](https://render.com/).
+2. Select your GitHub repository.
+3. Add environment variables in the "Environment" section using the `.env` file values.
+4. Deploy the project.
 
 ---
 
@@ -100,25 +141,25 @@ python -m unittest discover
 ## 📖 Usage Instructions
 
 1. Start the bot on Telegram by sending `/start`.
-2. Share an instgram link, youtube link, video, audo or voice message with the bot.
-3. Use `/search <song name, artist name>` command to search song 
-3. The bot will:
+2. Share an Instagram link, YouTube link, video, audio, or voice message with the bot.
+3. Use `/search <song name, artist name>` command to search for a song.
+4. The bot will:
    - Download the video.
    - Extract audio from the video.
-   - Identify the song and share the song with details to you.
+   - Identify the song and share it with details.
 
 ---
 
 ## 🛡️ License
 
-This project is licensed under the [GNU GENERAL PUBLIC LICENSE](LICENSE).
+This project is licensed under the [GNU General Public License](LICENSE).
 
 ---
 
 ## 🙌 Acknowledgements
 
-- [ProjectON3](https://t.me/ProjectON3) bots official telgram channel.
-- [ACRCloud](https://www.acrcloud.com/) for song recognition.
-- [FFmpeg](https://ffmpeg.org/) for audio extraction.
+- [ProjectON3](https://t.me/ProjectON3) - Official Telegram channel for bots.
+- [ACRCloud](https://www.acrcloud.com/) - Song recognition API.
+- [FFmpeg](https://ffmpeg.org/) - Audio extraction tool.
 
 ---
