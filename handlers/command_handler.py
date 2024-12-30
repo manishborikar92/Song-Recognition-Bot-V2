@@ -66,7 +66,6 @@ async def search(update: Update, context: CallbackContext):
     await downloading_message.edit_text(
         "⬇️ <b>Downloading song...</b> 🎶🚀",
         parse_mode='HTML',
-        reply_to_message_id=update.message.message_id
     )
     song_path = await asyncio.to_thread(download_song, song_title, song_artist)
 
