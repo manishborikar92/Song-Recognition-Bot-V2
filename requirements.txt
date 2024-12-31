@@ -1,9 +1,8 @@
+python-telegram-bot
 instaloader
-requests 
+requests
 yt-dlp
 eyed3
 pydub
-python-telegram-bot
 python-dotenv
 flask
-eyed3

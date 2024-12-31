@@ -3,9 +3,6 @@ import logging
 import requests
 import instaloader
 
-# Set up logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 def get_first_sentence(caption: str) -> str:
     """Get the first non-empty line from the caption."""
     return next((line.strip() for line in caption.splitlines() if line.strip()), "No caption available")

@@ -1,8 +1,8 @@
 # Use the official lightweight Python image
 FROM python:3.10-slim
 
-# Install necessary system dependencies
-RUN apt-get update && apt-get install -y ffmpeg && apt-get clean
+# Install ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
 
 # Set the working directory
 WORKDIR /app
@@ -10,15 +10,11 @@ WORKDIR /app
 # Copy all project files into the container
 COPY . .
 
-# Create and activate a Python virtual environment
-RUN python -m venv /app/venv
-ENV PATH="/app/venv/bin:$PATH"
-
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 5000 for Flask (if needed, optional for Telegram bots)
-EXPOSE 5000
+# Expose a port (useful if using webhooks, optional otherwise)
+EXPOSE 8080
 
 # Run the bot
-CMD ["python", "bot.py"]
+CMD ["python3", "bot.py"]

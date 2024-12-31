@@ -3,6 +3,7 @@ import time
 import json
 import hmac
 import base64
+import logging
 import hashlib
 import requests
 from pydub import AudioSegment
@@ -13,7 +14,7 @@ session = requests.Session()
 
 def recognize_song(audio_path):
     """
-    Recognize a song using ACRCloud. Automatically trims audio if it's longer than 1 minute.
+    Recognize a song using ACRCloud.
 
     Args:
         audio_path (str): The path to the audio file.
@@ -29,15 +30,6 @@ def recognize_song(audio_path):
     access_secret = ACR_ACCESS_SECRET
 
     try:
-        # Check and trim audio if necessary
-        audio = AudioSegment.from_file(audio_path)
-        if len(audio) > 60000:  # Check if audio is longer than 60 seconds
-            print("Audio is longer than 1 minute. Trimming to 20 seconds.")
-            trimmed_audio_path = os.path.splitext(audio_path)[0] + "_trimmed.mp3"
-            trimmed_audio = audio[10000:30000]  # Extract 10th to 30th second (20 seconds)
-            trimmed_audio.export(trimmed_audio_path, format="mp3")
-            audio_path = trimmed_audio_path  # Use trimmed audio for recognition
-
         # Prepare request data
         http_method = "POST"
         http_uri = "/v1/identify"
@@ -73,9 +65,6 @@ def recognize_song(audio_path):
                 'timestamp': timestamp
             }
 
-            # Debugging
-            print("Request Data:", data)
-
             # Make the POST request
             response = session.post(
                 f"{host}{http_uri}",
@@ -96,9 +85,9 @@ def recognize_song(audio_path):
             song = song_info["metadata"]["music"][0]
             title = song.get("title", "Unknown Title")
             artists = ", ".join(artist["name"] for artist in song.get("artists", []))
-            print(f"Title: {title}\n Artists: {artists}")
+            logging.info(f"Title: {title}\nArtists: {artists}")
         else:
-            print("No match found in ACRCloud database.")
+            logging.error("No match found in ACRCloud database.")
             return response_data
 
         return response_data
@@ -150,13 +139,13 @@ def get_song_info(title: str, artist: str):
             youtube_link = youtube_links[0] if youtube_links else f'https://www.youtube.com/results?search_query={title}'
             spotify_link = spotify_links[0] if spotify_links else f'https://open.spotify.com/search/{title}'
             
-            # Print results
-            print(f"Title: {title}")
-            print(f"Artists: {artists}")
-            print(f"Album: {album}")
-            print(f"Release Date: {release_date}")
-            print(f"YouTube Link: {youtube_link}")
-            print(f"Spotify Link: {spotify_link}")
+            # logging.info results
+            logging.info(f"Title: {title}")
+            logging.info(f"Artists: {artists}")
+            logging.info(f"Album: {album}")
+            logging.info(f"Release Date: {release_date}")
+            logging.info(f"YouTube Link: {youtube_link}")
+            logging.info(f"Spotify Link: {spotify_link}")
             
             return {
                 "title": title,
@@ -167,11 +156,11 @@ def get_song_info(title: str, artist: str):
                 "spotify_link": spotify_link,
             }
 
-        print("No results found.")
+        logging.error("No results found.")
         return None
 
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching song info: {e}")
+        logging.error(f"Error fetching song info: {e}")
         return None
 
 

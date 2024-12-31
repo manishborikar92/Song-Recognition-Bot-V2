@@ -1,16 +1,15 @@
 # 🎵 Song Recognition Bot
 
-A Telegram bot that helps you identify songs from Instagram links, YouTube links, videos, audio files, or voice messages by analyzing audio content using the ACRCloud API. The bot downloads the file, extracts audio, recognize song and provides the song file with details such as title, artist, album, release date, and links like YouTube and Spotify. This bot also features a `/search` command to get the song file.
+Unleash the power of audio recognition with the **Song Recognition Bot**! Designed for Telegram, this bot lets you effortlessly identify songs from Instagram links, YouTube links, videos, audio files, or voice messages. By utilizing the ACRCloud API, the bot extracts audio, recognizes the track, and delivers detailed information like title, artist, album, release date, and streaming links for platforms such as YouTube and Spotify. Plus, the `/search` command allows users to download songs directly.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-- Download videos from links shared by users.
-- Send downloaded videos.
-- Identify songs using the ACRCloud API.
-- Share song files and details with users, including title, artist, album, release date, and links like YouTube and Spotify.
-- `/search` command to fetch song files directly.
+- **Video Downloads Made Simple:** Easily download videos from shared links.
+- **Accurate Song Identification:** Powered by the advanced ACRCloud API for precise results.
+- **Detailed Song Information:** Receive metadata including title, artist, album, release date, and streaming links.
+- **Song Search Functionality:** Quickly search and fetch song files with the `/search` command.
 
 ---
 
@@ -20,36 +19,36 @@ A Telegram bot that helps you identify songs from Instagram links, YouTube links
 Song-Recognition-Bot/
 │  
 ├── data/
-│   ├── audios/                # Folder for temporarily storing audio files
-│   ├── music/                 # Folder for temporarily storing song files
-│   └── videos/                # Folder for temporarily storing video files
+│   ├── audios/                # Temporary storage for audio files
+│   ├── music/                 # Temporary storage for song files
+│   └── videos/                # Temporary storage for video files
 │
 ├── downloaders/
-│   ├── instagram.py           # Functions to download Instagram videos and captions
-│   ├── youtube.py             # Functions to download YouTube videos and captions
-│   └── song.py                # Functions to download song files  
+│   ├── instagram.py           # Functions for downloading Instagram videos and captions
+│   ├── youtube.py             # Functions for downloading YouTube videos and captions
+│   └── song.py                # Functions for downloading song files  
 │
 ├── handlers/
-│   ├── acrcloud_handler.py    # Functions for song recognition
-│   ├── command_handler.py     # Functions to handle commands
-│   ├── message_handler.py     # Functions to handle messages
-│   └── membership_handler.py  # Functions to check Telegram channel membership
+│   ├── command.py             # Functions to handle commands
+│   ├── message.py             # Functions to handle messages
+│   └── check_membership.py    # Functions to manage Telegram channel membership
 │
 ├── utils/
-│   ├── audio_extractor.py     # Functions to extract audio
-│   └── cleardata.py           # Functions to delete temporary files
+│   ├── audio_extractor.py     # Functions for audio extraction
+│   ├── acrcloud.py            # Functions for song recognition
+│   └── cleardata.py           # Functions for cleaning temporary files
 │
 ├── bot.py                     # Main entry point for the bot
+├── config.py                  # Configuration settings
+├── Dockerfile                 # Dockerfile for containerization
+├── requirements.txt           # Python dependencies
 ├── .env                       # Environment variables
-├── config.py                  # Configuration
-├── Dockerfile                 # Dockerfile for easy hosting
-├── requirements.txt           # List of Python dependencies
-└── README.md                  # Documentation about the project
+└── README.md                  # Documentation
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ How to Set Up
 
 ### Prerequisites
 
@@ -58,20 +57,20 @@ Song-Recognition-Bot/
 - Telegram Bot API token
 - [FFmpeg](https://ffmpeg.org/) installed on your system
 
-### 1. Clone the Repository
+### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/manishborikar92/Song-Recognition-Bot-V2.git
-cd Song-Recognition-Bot-V2
+git clone https://github.com/manishborikar92/Song-Recognition-Bot.git
+cd Song-Recognition-Bot
 ```
 
-### 2. Install Dependencies
+### Step 2: Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment Variables
+### Step 3: Configure Environment Variables
 
 Create a `.env` file in the root directory and add the following:
 
@@ -88,7 +87,7 @@ EXCEPTION_USER_ID=your_user_id
 WEBHOOK_URL=<insert_render_or_railway_website_url_here>
 ```
 
-### 4. Run the Bot
+### Step 4: Run the Bot
 
 ```bash
 python bot.py
@@ -98,13 +97,13 @@ python bot.py
 
 ## 🐳 Deploying with Docker (Optional)
 
-### 1. Build the Docker Image
+### Step 1: Build the Docker Image
 
 ```bash
 docker build -t song-recognition-bot .
 ```
 
-### 2. Run the Container
+### Step 2: Run the Container
 
 ```bash
 docker run -d --env-file .env --name song-recognition-bot song-recognition-bot
@@ -132,21 +131,21 @@ docker run -d --env-file .env --name song-recognition-bot song-recognition-bot
 
 ## 🧪 Testing
 
-Run the unit tests to ensure the components work as expected:
+Ensure all components are functioning as expected by running:
 
 ```bash
 python -m unittest discover
 ```
 
-## 📖 Usage Instructions
+## 📖 How to Use
 
 1. Start the bot on Telegram by sending `/start`.
-2. Share an Instagram link, YouTube link, video, audio, or voice message with the bot.
-3. Use `/search <song name, artist name>` command to search for a song.
+2. Share a link (Instagram or YouTube), video, audio, or voice message with the bot.
+3. Use `/search <song name - artist name>` to search for a specific song.
 4. The bot will:
-   - Download the video from link.
-   - Send video to user.
-   - Identify the song and share it with details.
+   - Download the video.
+   - Extract audio.
+   - Identify the song and share it along with its details.
 
 ---
 

@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-
 # Rate limit settings
 USER_RATE_LIMIT = 60  # Allow 1 request per minute per user
 last_request_time = {}

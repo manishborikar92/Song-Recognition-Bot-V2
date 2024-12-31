@@ -2,9 +2,6 @@ import os
 import logging
 from yt_dlp import YoutubeDL
 
-# Set up logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 def get_first_sentence(caption: str) -> str:
     """Get the first non-empty line from the caption."""
     return next((line.strip() for line in caption.splitlines() if line.strip()), "No description available")
@@ -58,7 +55,7 @@ def download_youtube_video(url, max_filesize_mb=100):
             filesize_bytes = info_dict.get('filesize') or info_dict.get('filesize_approx', 0)
             if filesize_bytes > max_filesize_mb * 1024 * 1024:
                 logging.warning(f"Video size exceeds {max_filesize_mb}MB. Skipping download.")
-                return None, f"Video size exceeds {max_filesize_mb}MB."
+                return None, "size exceeds"
 
             # Download the video
             logging.info("Downloading video...")

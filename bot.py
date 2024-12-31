@@ -4,8 +4,8 @@ from flask import Flask
 from threading import Thread
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from config import BOT_TOKEN
-from handlers.massage_handler import handle_message
-from handlers.command_handler import start_command, search_command, help_command, delete_command
+from handlers.command import start_command, help_command, search_command, delete_command
+from handlers.message import handle_message
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,7 +20,7 @@ logging.getLogger("telegram.request").setLevel(logging.WARNING)  # For request-r
 logging.getLogger("telegram.vendor.ptb_urllib3").setLevel(logging.WARNING)  # For telegram's urllib3 logs
 logging.getLogger("httpx").setLevel(logging.WARNING)  # For httpx logs (since telegram internally uses httpx)
 logging.getLogger("urllib3").setLevel(logging.WARNING)  # For general HTTP requests
-
+        
 # Flask app for Render
 app = Flask(__name__)
 
@@ -36,7 +36,6 @@ if __name__ == "__main__":
     # Start Flask in a separate thread
     Thread(target=run_flask).start()
 
-    # Telegram bot logic
     application = ApplicationBuilder().token(BOT_TOKEN).concurrent_updates(True).build()
 
     application.add_handler(CommandHandler("start", start_command))
@@ -46,5 +45,5 @@ if __name__ == "__main__":
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(MessageHandler(filters.VIDEO | filters.AUDIO | filters.VOICE, handle_message))
 
-    print("Bot is running...")
+    logging.info("Bot is running...")
     application.run_polling()
