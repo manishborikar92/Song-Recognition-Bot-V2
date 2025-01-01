@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime
 
 # Database file name
-DB_NAME = "song_recognition_bot.db"
+DB_NAME = "database/song_recognition_bot.db"
 
 class DBManager:
     def __init__(self):
