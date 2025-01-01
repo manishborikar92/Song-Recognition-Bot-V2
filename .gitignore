@@ -2,4 +2,4 @@
 __pycache__
 data
 .env
-edit_text.txt
+database/test_db_manager.py

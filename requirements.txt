@@ -6,3 +6,4 @@ eyed3
 pydub
 python-dotenv
 flask
+fpdf
