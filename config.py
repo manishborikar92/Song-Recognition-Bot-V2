@@ -21,6 +21,9 @@ ACR_ENDPOINT_URL = os.getenv("ACR_ENDPOINT_URL")
 # Group and Channel IDs
 GROUP_ID = os.getenv("GROUP_ID")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
+DEVELOPERS = set(
+    map(int, filter(None, os.getenv("DEVELOPERS", "").split(",")))
+)
 EXCEPTION_USER_IDS = set(map(int, os.getenv("EXCEPTION_USER_IDS", "").split(",")))
 GROUP_URL = "https://t.me/+b4-OKLiKbMoyODY1"
 CHANNEL_URL = "https://t.me/ProjectON3"
