@@ -21,6 +21,12 @@ db = DBManager()
 
 # Handle user messages
 async def handle_message(update: Update, context: CallbackContext):
+    user_id = update.message.from_user.id
+    user_name = update.message.from_user.full_name
+
+    if not db.user_exists(user_id):
+        db.add_user(user_id, user_name)
+        
     downloading_message = None
 
     user_id = update.message.from_user.id
@@ -76,11 +82,7 @@ async def handle_message(update: Update, context: CallbackContext):
         # URL input
         if update.message.text:
             user_id = update.message.from_user.id
-            user_name = update.message.from_user.full_name
             url = update.message.text
-
-            if not db.user_exists(user_id):
-                db.add_user(user_id, user_name)
 
             db.log_input(user_id, url)
             

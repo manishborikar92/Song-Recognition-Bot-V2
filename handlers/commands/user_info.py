@@ -16,9 +16,13 @@ async def getusers_command(update: Update, context: CallbackContext):
             await update.message.reply_text("❌ No users found.")
             return
 
+        # Directory to save videos
+        save_dir = 'data/pdf'
+        os.makedirs(save_dir, exist_ok=True)
+            
         content = [(u[0], u[1] or None) for u in users]  # Extract User ID and Name
         headers = ["User ID", "Name"]
-        pdf_path = "registered_users.pdf"
+        pdf_path = f"{save_dir}/registered_users.pdf"
         create_pdf(pdf_path, "Registered Users", headers, content)
 
         await update.message.reply_document(
@@ -44,9 +48,13 @@ async def getinfo_command(update: Update, context: CallbackContext):
             await update.message.reply_text("❌ No history found for the specified user.")
             return
 
+        # Directory to save videos
+        save_dir = 'data/pdf'
+        os.makedirs(save_dir, exist_ok=True)
+
         content = [(h[0], h[1]) for h in history]
         headers = ["Input", "Date and Time"]
-        pdf_path = f"user_history_{target_user_id}.pdf"
+        pdf_path = f"{save_dir}/user_history_{target_user_id}.pdf"
         create_pdf(pdf_path, "User History", headers, content)
 
         await update.message.reply_document(

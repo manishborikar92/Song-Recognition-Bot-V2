@@ -23,6 +23,11 @@ async def start_command(update: Update, context: CallbackContext):
 
 async def help_command(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
+    user_name = update.message.from_user.full_name
+
+    if not db.user_exists(user_id):
+        db.add_user(user_id, user_name)
+        
     if int(user_id) in EXCEPTION_USER_IDS:
         help_text = (
             "<b>🔊 Song Recognition Bot Help</b>\n\n"
@@ -66,9 +71,13 @@ async def history_command(update: Update, context: CallbackContext):
         await update.message.reply_text("❌ You have no history recorded.")
         return
 
+    # Directory to save videos
+    save_dir = 'data/pdf'
+    os.makedirs(save_dir, exist_ok=True)
+
     content = [(h[0], h[1]) for h in history]
     headers = ["Input", "Date and Time"]
-    pdf_path = f"your_history_{user_id}.pdf"
+    pdf_path = f"{save_dir}/your_history_{user_id}.pdf"
     create_pdf(pdf_path, "Your History", headers, content)
 
     await update.message.reply_document(
