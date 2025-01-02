@@ -4,11 +4,11 @@ from flask import Flask
 from threading import Thread
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from config import BOT_TOKEN
-from handlers.message import handle_message
-from handlers.commands.user import start_command, help_command, history_command
+from handlers.messages.message import handle_message
+from handlers.commands.start_help import start_command, help_command
 from handlers.commands.search import search_command
 from handlers.commands.broadcast import broadcast_command
-from handlers.commands.user_info import getinfo_command, getusers_command
+from handlers.commands.user_info import getinfo_command, getusers_command, history_command
 from handlers.commands.delete import deluser_command, delfiles_command
 
 # Configure logging
