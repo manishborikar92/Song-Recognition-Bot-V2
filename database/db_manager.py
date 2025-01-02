@@ -124,14 +124,3 @@ class DBManager:
             self.conn.close()
         except Exception as e:
             raise RuntimeError(f"Failed to close the database connection: {e}")
-
-# # Example usage (Ensure to set environment variables or update DB_CONFIG manually)
-# if __name__ == "__main__":
-#     db = DBManager()
-#     try:
-#         db.add_user(1, "John Doe")
-#         db.log_input(1, "Hello World")
-#         print(db.get_user_history(1))
-#         db.delete_user_data(1)
-#     finally:
-#         db.close()
